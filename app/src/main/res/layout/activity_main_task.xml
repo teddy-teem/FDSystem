@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainTask">
+
+        <me.itangqi.waveloadingview.WaveLoadingView
+            android:id="@+id/waveload"
+            android:layout_width="match_parent"
+            android:layout_height="155dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="120dp"
+            app:wlv_borderColor="#0D8FD5"
+            app:wlv_borderWidth="0dp"
+            app:wlv_progressValue="50"
+            app:wlv_round_rectangle="false"
+            app:wlv_shapeType="rectangle"
+            app:wlv_titleBottomColor="#554343"
+            app:wlv_titleBottomSize="14sp"
+            app:wlv_titleBottomStrokeColor="@android:color/holo_blue_dark"
+            app:wlv_titleCenterColor="#5E3426"
+            app:wlv_titleCenterSize="20sp"
+            app:wlv_titleCenterStrokeColor="@android:color/holo_blue_dark"
+            app:wlv_titleCenterStrokeWidth="3dp"
+            app:wlv_titleTopColor="#512315"
+            app:wlv_titleTopSize="14sp"
+            app:wlv_titleTopStrokeColor="@android:color/holo_blue_dark"
+            app:wlv_triangle_direction="north"
+            app:wlv_waveAmplitude="80"
+            app:wlv_waveColor="@android:color/holo_blue_dark" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="270dp"
+            android:layout_marginTop="1dp"
+            android:drawableLeft="@drawable/ic_hot"
+            android:textColor="#FD8C12"
+            android:textStyle="bold"
+
+            android:background="@drawable/round_rect1"
+            android:text="Temperature " />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="270dp"
+        android:background="@drawable/round_rect1"
+        android:drawableLeft="@drawable/ic_humidity"
+        android:text="   Humidity "
+        android:textColor="#007BFF"
+        android:textStyle="bold" />
+
+    <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="270dp"
+            android:layout_marginTop="26dp"
+            android:text="00.00°C"
+            android:textAlignment="center"
+            android:textColor="#9C2D24"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="270dp"
+            android:layout_marginTop="26dp"
+            android:text="000.00%"
+            android:textAlignment="center"
+            android:textColor="#9C9C08"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="280dp"
+            android:background="@drawable/round_rect2"
+            android:text=""
+            android:textColor="#ffffff" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="146dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="280dp"
+            android:ems="10"
+            android:enabled="false"
+            android:text="Readings"
+            android:textColor="#FFFF00" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="65dp"
+            android:textAlignment="center"
+            android:textSize="25dp"
+            android:textColor="#ff0000"
+            android:text="Not Raining" />
+
+    <include layout="@layout/bottom_sheet" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

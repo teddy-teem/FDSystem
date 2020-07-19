@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/cm"
+        android:title="CM"
+        app:showAsAction="never"/>
+    <item android:id="@+id/m"
+        android:title="M"
+        app:showAsAction="never"/>
+    <item android:id="@+id/inch"
+        android:title="Inch"
+        app:showAsAction="never"/>
+    <item android:id="@+id/feet"
+        android:title="Foot"
+        app:showAsAction="never"/>
+</menu>

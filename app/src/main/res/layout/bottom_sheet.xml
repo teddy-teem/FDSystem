@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    app:behavior_peekHeight="?actionBarSize"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
+    <!--expand to top android:layout_height="match_parent"-->
+
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progbar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@android:color/darker_gray"
+        android:progress="100" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/design_default_color_primary_variant"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="280dp"
+            android:background="@drawable/round_btn"
+            android:textColor="#ffffff"
+            android:text="Find" />
+
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="130dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/round_rect1"
+            android:layout_marginTop="5dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint=" Search"
+            android:text="" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/tb_up_down"
+            android:text=""
+            android:textOff=""
+            android:textOn="" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/toggleButton"
+            android:layout_toStartOf="@id/linearButtons"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtCantante"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dhaka"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtCancion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="Mirpur"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+</LinearLayout>
