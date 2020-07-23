@@ -3,6 +3,7 @@ package com.example.fdsystem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
 import android.content.Intent;
@@ -75,14 +76,22 @@ public class MainTask extends AppCompatActivity {
     private ContentLoadingProgressBar progbar;
     long backpretime;
     EditText searchArea;
-
+    SwipeRefreshLayout refreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_task);
-
+        findViewById(R.id.buttondata).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainTask.this, DataTable.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         init();
         rellenarListView();
+        SwipLayout();
         tbUpDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -261,6 +270,7 @@ public class MainTask extends AppCompatActivity {
         t2 = (TextView)findViewById(R.id.textView2);
         t3 = (TextView)findViewById(R.id.textView3);
         t4 = (TextView)findViewById(R.id.textView);
+        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swip);
         searchArea = (EditText)findViewById(R.id.editSearch);
         HRain.setSpan(fcsRed, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Rain.setSpan(fcsYello, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -269,6 +279,16 @@ public class MainTask extends AppCompatActivity {
         NoRain.setSpan(fcsGreen, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
        // Debug = findViewById(R.id.debug);
 
+    }
+    private void SwipLayout(){
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
     }
     private void rellenarListView() {
         String[] Location = {"Dhaka", "Chittagong", "Rajshahi", "Khulna", "Sylhet", "Rangpur", "Barishal", "Mymensingh"};
@@ -312,7 +332,6 @@ public class MainTask extends AppCompatActivity {
         return new SimpleAdapter(this, lista,
                 android.R.layout.simple_list_item_2, new String[]{"Cantante", "Titulo"},
                 new int[]{android.R.id.text1, android.R.id.text2}) {
-
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -327,9 +346,6 @@ public class MainTask extends AppCompatActivity {
             }
 
         };
-    }
-    private int getRandom() {
-        return (int) Math.floor(Math.random() * 100);
     }
 
     @Override

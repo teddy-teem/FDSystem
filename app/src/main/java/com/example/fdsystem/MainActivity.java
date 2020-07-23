@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        login = (Button) findViewById(R.id.button);
-        username = (EditText) findViewById(R.id.editText);
-        userpass = (EditText) findViewById(R.id.editText2);
-        reg = (Button) findViewById(R.id.button5);
+        login = (Button) findViewById(R.id.login);
+        username = (EditText) findViewById(R.id.user_txt);
+        userpass = (EditText) findViewById(R.id.pass_txt);
+        reg = (Button) findViewById(R.id.reg_btn);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
