@@ -45,12 +45,12 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="100dp"
             android:layout_weight="1"
             android:inputType="text"
             android:background="@drawable/round_rect1"
             android:hint=" User Id"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textStyle="bold" />
 
         <EditText
@@ -61,7 +61,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:background="@drawable/round_rect1"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textStyle="bold"
             android:inputType="textPassword"
             android:hint=" Password"

@@ -135,9 +135,14 @@
 
         <Button
             android:id="@+id/buttondata"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="300dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:background="@drawable/round_btn_log"
+            android:textColor="#ffff00"
+            android:textStyle="bold"
+            android:text="Data LOG" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

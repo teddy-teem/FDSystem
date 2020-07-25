@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:id="@+id/cardlayout"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/d_id"
+            android:layout_width="120dp"
+            android:layout_marginLeft="5dp"
+            android:text="Mymensingh1"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/d_name"
+            android:layout_width="100dp"
+            android:text="Mymensingh"
+            android:layout_marginLeft="5dp"
+            android:textSize="15dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/d_level"
+            android:layout_width="80dp"
+            android:layout_marginLeft="5dp"
+            android:text="100 cm"
+            android:textSize="15dp"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/d_up_d"
+            android:layout_width="50dp"
+            android:textAlignment="center"
+            android:layout_marginLeft="5dp"
+            android:textSize="15dp"
+            android:text="▲/▼"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

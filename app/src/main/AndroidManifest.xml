@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DataTable"></activity>
+        <activity android:name=".LogTable"></activity>
         <activity android:name=".Preference" />
         <activity android:name=".AdminArea" />
         <activity android:name=".Register" />

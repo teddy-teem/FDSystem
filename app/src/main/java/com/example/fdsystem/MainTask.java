@@ -8,46 +8,32 @@ import me.itangqi.waveloadingview.WaveLoadingView;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.location.Location;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
-import java.nio.DoubleBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
 public class MainTask extends AppCompatActivity {
     DatabaseReference myRef;
@@ -55,7 +41,8 @@ public class MainTask extends AppCompatActivity {
     String water_level,temp;
     String FiArea,SubArea;
     String[] Location;
-    ArrayList<Map<String, Object>> lista = new ArrayList<>();
+    ArrayList<String> lista = new ArrayList<>();
+    ArrayAdapter<String> adapter;
     WaveLoadingView mWaveLoadingView;
     TextView t1,t2,t3,t4,Debug;
     SpannableString HRain = new SpannableString("Heavvy Raining");
@@ -84,7 +71,7 @@ public class MainTask extends AppCompatActivity {
         findViewById(R.id.buttondata).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainTask.this, DataTable.class);
+                Intent intent = new Intent(MainTask.this, LogTable.class);
                 startActivity(intent);
                 finish();
             }
@@ -139,7 +126,7 @@ public class MainTask extends AppCompatActivity {
             }
         });
 
-       myRef = FirebaseDatabase.getInstance().getReference().child("Readings");
+        myRef = FirebaseDatabase.getInstance().getReference().child("Readings");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -261,7 +248,7 @@ public class MainTask extends AppCompatActivity {
         this.linearLayoutBSheet = findViewById(R.id.bottomSheet);
         this.bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBSheet);
         this.tbUpDown = findViewById(R.id.toggleButton);
-        this.listView = findViewById(R.id.listView);
+        this.listView = findViewById(R.id.buttom_listView);
         this.txtCantante = findViewById(R.id.txtCantante);
         this.txtCancion = findViewById(R.id.txtCancion);
         this.progbar = findViewById(R.id.progbar);
@@ -277,7 +264,7 @@ public class MainTask extends AppCompatActivity {
         NRain.setSpan(fcsBlue, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         LRain.setSpan(fcsGray, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         NoRain.setSpan(fcsGreen, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-       // Debug = findViewById(R.id.debug);
+        // Debug = findViewById(R.id.debug);
 
     }
     private void SwipLayout(){
@@ -295,59 +282,10 @@ public class MainTask extends AppCompatActivity {
         String[] Device = {"Dhanmondi", "City",
                 "Garden", "Boro Bazar", "Jaflang", "BRU", "Potuakhali",
                 "Tista"};
-
-        int nombresLen = Location.length;
-
-        for (int i = 0; i < nombresLen; i++) {
-            Map<String, Object> listItem = new HashMap<>();
-            listItem.put("Cantante", Location[i]);
-            listItem.put("Titulo", Device[i]);
-            lista.add(listItem);
-        }
-        this.listView.setAdapter(getAdapterListViewCT(lista));
-
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView txtCantanteLV = view.findViewById(android.R.id.text1);
-                TextView txtCancionLV = view.findViewById(android.R.id.text2);
-
-                txtCantante.setText(txtCantanteLV.getText());
-                txtCancion.setText(txtCancionLV.getText());
-                FiArea = txtCantanteLV.getText().toString();
-                SubArea = txtCancionLV.getText().toString();
-                FirebaseDatabase sendDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference sendMyRef = sendDatabase.getReference().child("Select");
-                sendMyRef.child("Area").setValue(FiArea);
-                sendMyRef.child("SubArea").setValue(SubArea);
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-                Toast.makeText(getApplicationContext(),FiArea, Toast.LENGTH_SHORT).show();
-                //progbar.setProgress(getRandom());
-            }
-        });
+        lista = new ArrayList<>(Arrays.asList(Location));
+        adapter = new ArrayAdapter<String>(this, R.layout.b_listview,R.id.area_name,lista);
+        listView.setAdapter(adapter);
     }
-    private SimpleAdapter getAdapterListViewCT(ArrayList<Map<String, Object>> lista) {
-        return new SimpleAdapter(this, lista,
-                android.R.layout.simple_list_item_2, new String[]{"Cantante", "Titulo"},
-                new int[]{android.R.id.text1, android.R.id.text2}) {
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-
-                TextView txtNombre = view.findViewById(android.R.id.text1);
-                txtNombre.setTypeface(Typeface.DEFAULT_BOLD);
-
-                TextView txtCorreo = view.findViewById(android.R.id.text2);
-                txtCorreo.setTextColor(Color.RED);
-
-                return view;
-            }
-
-        };
-    }
-
     @Override
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){

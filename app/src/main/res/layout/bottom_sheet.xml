@@ -84,7 +84,6 @@
                 android:fontFamily="sans-serif-light"
                 android:text="Mirpur"
                 android:textColor="@android:color/white" />
-
         </LinearLayout>
         <LinearLayout
             android:id="@+id/linearButtons"
@@ -95,12 +94,10 @@
             android:gravity="center"
             android:orientation="horizontal">
         </LinearLayout>
-
-
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/buttom_listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
