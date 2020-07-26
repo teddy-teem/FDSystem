@@ -16,16 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHolder> {
     ArrayList<bData> list;
-    public bAdapterClass(ArrayList<bData> mlist){
-        list=mlist;
-    }
     SpannableString up = new SpannableString("▲");
     SpannableString down = new SpannableString("▼");
     ForegroundColorSpan fcsYello = new ForegroundColorSpan(Color.YELLOW);
     ForegroundColorSpan fcsRed = new ForegroundColorSpan(Color.RED);
     ForegroundColorSpan fcsBlue = new ForegroundColorSpan(Color.BLUE);
     ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.GREEN);
+    private BAdapterClickListner listner;
 
+    public bAdapterClass(ArrayList<bData> mlist, BAdapterClickListner listner){
+        this.list=mlist;
+        this.listner = listner;
+    }
     @NonNull
     @Override
     public MyBViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,6 +44,7 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         holder.tv_wlevel.setText(list.get(position).getLevel());
         holder.tv_upd.setText(list.get(position).getUp_down());
         String up_d = list.get(position).getUp_down();
+
         if (up_d.equals("▲▲")){
                 up.setSpan(fcsRed, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.tv_upd.setText(up);
@@ -65,15 +68,29 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         return list.size();
     }
 
-    public class MyBViewHolder extends RecyclerView.ViewHolder{
+    public interface BAdapterClickListner{
+        void onClick(View v, int position);
+    }
+
+    public class MyBViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tv_id, tv_area,tv_wlevel, tv_upd;
+
         public MyBViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_id = itemView.findViewById(R.id.area_id);
             tv_area = itemView.findViewById(R.id.area_name);
             tv_wlevel=itemView.findViewById(R.id.wlevel);
             tv_upd=itemView.findViewById(R.id.upd);
+            itemView.setOnClickListener(this);
 
         }
+
+        @Override
+        public void onClick(View view) {
+            listner.onClick(view,getAdapterPosition());
+        }
     }
+
+
+
 }

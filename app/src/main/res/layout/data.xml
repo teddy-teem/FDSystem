@@ -17,29 +17,29 @@
             android:text="Mymensingh1"
             android:textSize="15dp"
             android:layout_height="wrap_content"/>
+
         <TextView
             android:id="@+id/d_name"
-            android:layout_width="110dp"
-            android:text="Mymensingh"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:textSize="15dp"
-            android:layout_height="wrap_content"/>
+            android:text="Mymensingh"
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/d_level"
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_marginLeft="5dp"
-            android:text="100 cm"
+            android:text="1000 cm"
             android:textSize="15dp"
             android:textAlignment="center"
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/d_up_d"
-            android:layout_width="40dp"
-            android:textAlignment="center"
+            android:layout_width="35dp"
             android:layout_marginLeft="5dp"
             android:textSize="15dp"
-            android:text="▲/▼"
+            android:text="▲▼"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 

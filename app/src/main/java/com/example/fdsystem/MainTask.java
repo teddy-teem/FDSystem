@@ -71,6 +71,7 @@ public class MainTask extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<bData> list;
     SearchView srView;
+    private bAdapterClass.BAdapterClickListner listner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +279,21 @@ public class MainTask extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Readings");
         srView = (SearchView) findViewById(R.id.srchv);
+        setOnClickListner();
         //Debug = findViewById(R.id.debug);
+    }
+
+    private void setOnClickListner() {
+        listner = new bAdapterClass.BAdapterClickListner() {
+            @Override
+            public void onClick(View v, int position) {
+                myRef = FirebaseDatabase.getInstance().getReference().child("Select");
+                myRef.child("Area").setValue(list.get(position).getDeviceArea());
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        };
     }
 
     @Override
@@ -295,7 +310,7 @@ public class MainTask extends AppCompatActivity {
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
                             list.add(ds.getValue(bData.class));
                         }
-                        bAdapterClass BAdapterClass = new bAdapterClass(list);
+                        bAdapterClass BAdapterClass = new bAdapterClass(list, listner);
                         rv.setAdapter(BAdapterClass);
                     }
                 }
@@ -320,12 +335,11 @@ public class MainTask extends AppCompatActivity {
                         mylist.add(ld);
                     }
                 }
-                bAdapterClass BAdapter = new bAdapterClass(mylist);
+                bAdapterClass BAdapter = new bAdapterClass(mylist,listner);
                 rv.setAdapter(BAdapter);
                 return true;
             }
         });
-
     }
 
     private void SwipLayout(){
@@ -351,5 +365,4 @@ public class MainTask extends AppCompatActivity {
         backpretime = System.currentTimeMillis();
 
     }
-
 }
