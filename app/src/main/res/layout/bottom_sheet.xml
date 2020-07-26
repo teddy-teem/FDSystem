@@ -19,55 +19,28 @@
         android:background="@android:color/darker_gray"
         android:progress="100" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@color/design_default_color_primary_variant"
+        android:orientation="horizontal"
         android:paddingEnd="8dp"
         android:paddingStart="8dp">
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="280dp"
-            android:background="@drawable/round_btn"
-            android:textColor="#ffffff"
-            android:text="Find" />
-
-        <EditText
-            android:id="@+id/editSearch"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="130dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/round_rect1"
-            android:layout_marginTop="5dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint=" Search"
-            android:text="" />
 
         <ToggleButton
             android:id="@+id/toggleButton"
             android:layout_width="30dp"
             android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
             android:background="@drawable/tb_up_down"
             android:text=""
             android:textOff=""
             android:textOn="" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/toggleButton"
-            android:layout_toStartOf="@id/linearButtons"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/txtCantante"
                 android:layout_width="wrap_content"
@@ -85,22 +58,25 @@
                 android:text="Mirpur"
                 android:textColor="@android:color/white" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/linearButtons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal">
-        </LinearLayout>
-    </RelativeLayout>
+        <SearchView
+            android:id="@+id/srchv"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="3dp"
+            android:queryHint="Search"
+            android:iconifiedByDefault="false"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="#ffffff"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
-    <ListView
-        android:id="@+id/buttom_listView"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:id="@+id/brecyclerview"
+        android:background="#AEC9F6"
+        android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 </LinearLayout>

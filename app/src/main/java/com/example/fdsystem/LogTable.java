@@ -27,7 +27,7 @@ public class LogTable extends AppCompatActivity {
     DatabaseReference ref;
     FirebaseDatabase database;
     ArrayList<LogData> list;
-
+    int isSort=0;
     LogData logData;
 
     @Override
@@ -44,7 +44,6 @@ public class LogTable extends AppCompatActivity {
         ref = database.getReference("Readings");
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,6 +74,13 @@ public class LogTable extends AppCompatActivity {
 
 
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.sort){
+            isSort=1;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

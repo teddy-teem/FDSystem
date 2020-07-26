@@ -3,6 +3,8 @@ package com.example.fdsystem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
@@ -21,6 +23,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -36,8 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainTask extends AppCompatActivity {
-    DatabaseReference myRef;
-    String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub;
+    DatabaseReference myRef,ref;
+    String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub, mxlevel;
     String water_level,temp;
     String FiArea,SubArea;
     String[] Location;
@@ -64,6 +67,11 @@ public class MainTask extends AppCompatActivity {
     long backpretime;
     EditText searchArea;
     SwipeRefreshLayout refreshLayout;
+    RecyclerView rv;
+    FirebaseDatabase database;
+    ArrayList<bData> list;
+    SearchView srView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +85,6 @@ public class MainTask extends AppCompatActivity {
             }
         });
         init();
-        rellenarListView();
         SwipLayout();
         tbUpDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -137,6 +144,8 @@ public class MainTask extends AppCompatActivity {
                 dbRainD = dataSnapshot.child(dbLol).child("RainD").getValue(String.class).toString();
                 dbhum = dataSnapshot.child(dbLol).child("Humidity").getValue(String.class).toString();
                 dbtemp = dataSnapshot.child(dbLol).child("Temp").getValue(String.class).toString();
+                mxlevel = dataSnapshot.child(dbLol).child("maxHeight").getValue(String.class).toString();
+                //Debug.setText(mxlevel);
                 SetRiverLevel();
                 SetHumiTemp();
                 SetRainMessage();
@@ -150,7 +159,7 @@ public class MainTask extends AppCompatActivity {
         });
     }
     public void SetRiverLevel(){
-        double maxH=15.00;
+        double maxH=Double.parseDouble(mxlevel);
         double level = Double.parseDouble(dbwater_level);
         double waterLevel = maxH-level;
         if (waterLevel<0)
@@ -248,7 +257,6 @@ public class MainTask extends AppCompatActivity {
         this.linearLayoutBSheet = findViewById(R.id.bottomSheet);
         this.bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBSheet);
         this.tbUpDown = findViewById(R.id.toggleButton);
-        this.listView = findViewById(R.id.buttom_listView);
         this.txtCantante = findViewById(R.id.txtCantante);
         this.txtCancion = findViewById(R.id.txtCancion);
         this.progbar = findViewById(R.id.progbar);
@@ -258,15 +266,68 @@ public class MainTask extends AppCompatActivity {
         t3 = (TextView)findViewById(R.id.textView3);
         t4 = (TextView)findViewById(R.id.textView);
         refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swip);
-        searchArea = (EditText)findViewById(R.id.editSearch);
+       // searchArea = (EditText)findViewById(R.id.editSearch);
         HRain.setSpan(fcsRed, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Rain.setSpan(fcsYello, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         NRain.setSpan(fcsBlue, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         LRain.setSpan(fcsGray, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         NoRain.setSpan(fcsGreen, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // Debug = findViewById(R.id.debug);
+        rv = (RecyclerView)findViewById(R.id.brecyclerview);
+        rv.setHasFixedSize(true);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReference("Readings");
+        srView = (SearchView) findViewById(R.id.srchv);
+        //Debug = findViewById(R.id.debug);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (ref != null){
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists())
+                    {
+                        list = new ArrayList<>();
+                        for (DataSnapshot ds :dataSnapshot.getChildren()){
+                            list.add(ds.getValue(bData.class));
+                        }
+                        bAdapterClass BAdapterClass = new bAdapterClass(list);
+                        rv.setAdapter(BAdapterClass);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(MainTask.this, "databaseError.getMessage().toString()", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        srView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                ArrayList<bData> mylist = new ArrayList<>();
+                for (bData ld: list){
+                    if (ld.getDeviceID().toLowerCase().contains(s.toLowerCase())){
+                        mylist.add(ld);
+                    }
+                }
+                bAdapterClass BAdapter = new bAdapterClass(mylist);
+                rv.setAdapter(BAdapter);
+                return true;
+            }
+        });
 
     }
+
     private void SwipLayout(){
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -277,15 +338,7 @@ public class MainTask extends AppCompatActivity {
             }
         });
     }
-    private void rellenarListView() {
-        String[] Location = {"Dhaka", "Chittagong", "Rajshahi", "Khulna", "Sylhet", "Rangpur", "Barishal", "Mymensingh"};
-        String[] Device = {"Dhanmondi", "City",
-                "Garden", "Boro Bazar", "Jaflang", "BRU", "Potuakhali",
-                "Tista"};
-        lista = new ArrayList<>(Arrays.asList(Location));
-        adapter = new ArrayAdapter<String>(this, R.layout.b_listview,R.id.area_name,lista);
-        listView.setAdapter(adapter);
-    }
+
     @Override
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){

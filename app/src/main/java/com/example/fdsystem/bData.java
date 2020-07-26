@@ -1,20 +1,17 @@
 package com.example.fdsystem;
 
-public class LogData {
+public class bData {
     String DeviceID, DeviceArea, Level, up_down, maxHeight;
-    public String getDeviceID() {
-        return DeviceID;
-    }
 
-    public LogData() {
-    }
-
-    public LogData(String deviceID, String deviceArea, String level, String up_down, String MxHeight) {
+    public bData(String deviceID, String deviceArea, String level, String Up_down, String MaxHeight) {
         DeviceID = deviceID;
         DeviceArea = deviceArea;
-        Level = level;
-        this.up_down = up_down;
-        maxHeight = MxHeight;
+        Level=level;
+        up_down=Up_down;
+        maxHeight=MaxHeight;
+    }
+
+    public bData() {
     }
 
     public String getMaxHeight() {
@@ -23,18 +20,6 @@ public class LogData {
 
     public void setMaxHeight(String maxHeight) {
         this.maxHeight = maxHeight;
-    }
-
-    public void setDeviceID(String deviceID) {
-        DeviceID = deviceID;
-    }
-
-    public String getDeviceArea() {
-        return DeviceArea;
-    }
-
-    public void setDeviceArea(String deviceArea) {
-        DeviceArea = deviceArea;
     }
 
     public String getLevel() {
@@ -51,5 +36,21 @@ public class LogData {
 
     public void setUp_down(String up_down) {
         this.up_down = up_down;
+    }
+
+    public String getDeviceID() {
+        return DeviceID;
+    }
+
+    public void setDeviceID(String deviceID) {
+        DeviceID = deviceID;
+    }
+
+    public String getDeviceArea() {
+        return DeviceArea;
+    }
+
+    public void setDeviceArea(String deviceArea) {
+        DeviceArea = deviceArea;
     }
 }
