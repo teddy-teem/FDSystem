@@ -74,20 +74,22 @@ public class Register extends AppCompatActivity {
                 String ADMIN = adminPass.getText().toString();
                 if(validate() && ADMIN.equals(adpass)){
                     ///Upload Data to database..
-                    String user_email = userEmail.getText().toString().trim();
-                    String password  = userConfirmPassword.getText().toString().trim();
-                    String c_pass = userPassword.getText().toString().trim();
+                    final String user_email = userEmail.getText().toString().trim();
+                    final String password  = userConfirmPassword.getText().toString().trim();
+                    final String c_pass = userPassword.getText().toString().trim();
                     // Write a message to the database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference().child("Users");
-                    myRef.child("Email").setValue(user_email);
-                    myRef.child("pass1").setValue(password);
-                    myRef.child("pass2").setValue(c_pass);
+                    // final DatabaseReference Ref = database.getReference().child("Users");
+
                     firebaseAuth.createUserWithEmailAndPassword(user_email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful() && cnt<5) {
                                 Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
+                                /*Ref.child(user_email).setValue(user_email);
+                                Ref.child(user_email).child("id").setValue(user_email);
+                                Ref.child(user_email).child("password").setValue(c_pass);
+                                Ref.child(user_email).child("name").setValue(userName.getText().toString());*/
                                 cnt++;
                                 progressDialog.dismiss();
                                 startActivity(new Intent(Register.this,MainActivity.class));

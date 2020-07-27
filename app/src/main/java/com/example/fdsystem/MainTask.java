@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -72,6 +73,7 @@ public class MainTask extends AppCompatActivity {
     FirebaseDatabase database;
     ArrayList<bData> list;
     SearchView srView;
+    bAdapterClass BAdapterClass;
     private bAdapterClass.BAdapterClickListner listner;
 
     @Override
@@ -340,7 +342,7 @@ public class MainTask extends AppCompatActivity {
                                 list.add(B);
                             }
                         }
-                        bAdapterClass BAdapterClass = new bAdapterClass(list, listner);
+                        BAdapterClass = new bAdapterClass(list, listner);
                         rv.setAdapter(BAdapterClass);
                     }
                 }
@@ -359,14 +361,7 @@ public class MainTask extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                ArrayList<bData> mylist = new ArrayList<>();
-                for (bData ld: list){
-                    if (ld.getDeviceID().toLowerCase().contains(s.toLowerCase())){
-                        mylist.add(ld);
-                    }
-                }
-                bAdapterClass BAdapter = new bAdapterClass(mylist,listner);
-                rv.setAdapter(BAdapter);
+                BAdapterClass.getFilter().filter(s);
                 return true;
             }
         });

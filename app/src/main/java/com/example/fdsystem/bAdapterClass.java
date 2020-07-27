@@ -7,15 +7,19 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHolder> {
-    ArrayList<bData> list;
+public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHolder> implements Filterable {
+    ArrayList<bData> list, mylist;
     SpannableString up = new SpannableString("▲");
     SpannableString down = new SpannableString("▼");
     ForegroundColorSpan fcsYello = new ForegroundColorSpan(Color.YELLOW);
@@ -24,9 +28,11 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
     ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.GREEN);
     private BAdapterClickListner listner;
 
+
     public bAdapterClass(ArrayList<bData> mlist, BAdapterClickListner listner){
         this.list=mlist;
         this.listner = listner;
+        mylist=new ArrayList<>(mlist);
     }
     @NonNull
     @Override
@@ -36,6 +42,7 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         return new bAdapterClass.MyBViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull MyBViewHolder holder, int position) {
         final bData logData = list.get(position);
@@ -44,21 +51,6 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         holder.tv_wlevel.setText(list.get(position).getLevel());
         holder.tv_upd.setText(list.get(position).getUp_down());
         String up_d = list.get(position).getUp_down();
-
-       /* if (mainTask.dbunitH.equals("Inch")){
-            level = level/2.54;
-            level = Math.round(level*100.0)/100.0;
-            holder.tv_wlevel.setText(String.valueOf(level)+" I");
-        }
-        else if(mainTask.dbunitH.equals("foot")){
-            level = level/30.48;
-            level = Math.round(level*100.0)/100.0;
-            holder.tv_wlevel.setText(String.valueOf(level)+" F");
-        }else if(mainTask.dbunitH.equals("M")){
-            level = level/100;
-            level = Math.round(level*100.0)/100.0;
-            holder.tv_wlevel.setText(String.valueOf(level)+" F");
-        }*/
 
         if (up_d.equals("▲▲")){
                 up.setSpan(fcsRed, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -83,11 +75,44 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         return list.size();
     }
 
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+    Filter filter= new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            ArrayList<bData> filterlist = new ArrayList<>();
+            if (charSequence.toString().isEmpty()){
+                filterlist.addAll(mylist);
+            }
+            else{
+                for (bData x: mylist){
+                    if (x.DeviceID.toLowerCase().contains(charSequence.toString().toLowerCase())){
+                        filterlist.add(x);
+                    }
+                }
+            }
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filterlist;
+
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            list.clear();
+            list.addAll((Collection<? extends bData>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
+
+
     public interface BAdapterClickListner{
         void onClick(View v, int position);
     }
 
-    public class MyBViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyBViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_id, tv_area,tv_wlevel, tv_upd;
 
         public MyBViewHolder(@NonNull View itemView) {

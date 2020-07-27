@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         username = (EditText) findViewById(R.id.user_txt);
         userpass = (EditText) findViewById(R.id.pass_txt);
         reg = (Button) findViewById(R.id.reg_btn);
+        admin=findViewById(R.id.admin_btn);
 
 
 
@@ -83,11 +84,6 @@ public class MainActivity extends AppCompatActivity {
                     if (x.equals(adname) && y.equals(adpass)) {
                         progressDialog.dismiss();
 
-
-
-
-
-
                         Intent intent = new Intent(MainActivity.this, MainTask.class);
                         startActivity(intent);
                         finish();
@@ -103,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this,Register.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        admin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,AdminArea.class);
                 startActivity(intent);
                 finish();
             }
