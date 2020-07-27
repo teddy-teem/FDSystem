@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,25 +25,42 @@ import java.util.ArrayList;
 public class LogTable extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    DatabaseReference ref;
+    DatabaseReference ref, myRef;
     FirebaseDatabase database;
-    ArrayList<LogData> list;
+    ArrayList<LogData> list=new ArrayList<>();;
     int isSort=0;
     LogData logData;
+    String dbunitH;
+    //SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_table);
-
+        init();
+        myRef = FirebaseDatabase.getInstance().getReference().child("Select");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                dbunitH = dataSnapshot.child("unitHeight").getValue(String.class).toString();
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public  void init(){
         recyclerView = findViewById(R.id.myrecyclerview);
-       // sr = (SearchView) findViewById(R.id.srch);
+        // sr = (SearchView) findViewById(R.id.srch);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Readings");
-
     }
 
     @Override
@@ -77,9 +95,6 @@ public class LogTable extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.sort){
-            isSort=1;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -92,9 +107,38 @@ public class LogTable extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists())
                     {
-                        list = new ArrayList<>();
+                        LogData D = new LogData();
+                        list.clear();
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
-                            list.add(ds.getValue(LogData.class));
+                            D=ds.getValue(LogData.class);
+                            if (dbunitH.equals("Inch")){
+                                double x = Double.parseDouble(D.Level);
+                                x=x/2.54;
+                                x = Math.round(x*100.0)/100.0;
+                                D.Level=String.valueOf(x);
+                                D.Level +=" I";
+                                list.add(D);
+                            }
+                            else if (dbunitH.equals("Foot")){
+                                double x = Double.parseDouble(D.Level);
+                                x=x/30.48;
+                                x = Math.round(x*100.0)/100.0;
+                                D.Level=String.valueOf(x);
+                                D.Level +=" F";
+                                list.add(D);
+                            }
+                            else if (dbunitH.equals("M")){
+                                double x = Double.parseDouble(D.Level);
+                                x=x/100.00;
+                                x = Math.round(x*100.0)/100.0;
+                                D.Level=String.valueOf(x);
+                                D.Level +=" M";
+                                list.add(D);
+                            }
+                            else{
+                                D.Level += " cm";
+                                list.add(D);
+                            }
                         }
                         LogAdapterClass logAdapterClass = new LogAdapterClass(list);
                         recyclerView.setAdapter(logAdapterClass);
@@ -108,7 +152,6 @@ public class LogTable extends AppCompatActivity {
         }
 
     }
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainTask.class);

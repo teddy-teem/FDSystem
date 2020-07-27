@@ -4,14 +4,14 @@
     <item android:id="@+id/preference"
         android:title="Preference"
         app:showAsAction="never"/>
+    <item android:id="@+id/dlog"
+        android:title="Data Log"
+        app:showAsAction="never"/>
     <item android:id="@+id/help"
         android:title="Help"
         app:showAsAction="never"/>
     <item android:id="@+id/about"
         android:title="About"
-        app:showAsAction="never"/>
-    <item android:id="@+id/userr"
-        android:title="User"
         app:showAsAction="never"/>
     <item android:id="@+id/logout"
         android:title="Log Out"

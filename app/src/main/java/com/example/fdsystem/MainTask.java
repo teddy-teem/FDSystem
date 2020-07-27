@@ -17,6 +17,7 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -40,7 +41,7 @@ import java.util.Arrays;
 
 public class MainTask extends AppCompatActivity {
     DatabaseReference myRef,ref;
-    String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub, mxlevel;
+    public String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub, mxlevel,mxhumi,mxtemp,mnhumi,mntemp;
     String water_level,temp;
     String FiArea,SubArea;
     String[] Location;
@@ -77,14 +78,6 @@ public class MainTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_task);
-        findViewById(R.id.buttondata).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainTask.this, LogTable.class);
-                startActivity(intent);
-                finish();
-            }
-        });
         init();
         SwipLayout();
         tbUpDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -140,12 +133,16 @@ public class MainTask extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                dbwater_level = dataSnapshot.child(dbLol).child("Level").getValue(String.class).toString();
-                dbRainA = dataSnapshot.child(dbLol).child("RainA").getValue(String.class).toString();
-                dbRainD = dataSnapshot.child(dbLol).child("RainD").getValue(String.class).toString();
-                dbhum = dataSnapshot.child(dbLol).child("Humidity").getValue(String.class).toString();
-                dbtemp = dataSnapshot.child(dbLol).child("Temp").getValue(String.class).toString();
-                mxlevel = dataSnapshot.child(dbLol).child("maxHeight").getValue(String.class).toString();
+                dbwater_level = dataSnapshot.child(dbSub).child("Level").getValue(String.class).toString();
+                dbRainA = dataSnapshot.child(dbSub).child("RainA").getValue(String.class).toString();
+                dbRainD = dataSnapshot.child(dbSub).child("RainD").getValue(String.class).toString();
+                dbhum = dataSnapshot.child(dbSub).child("Humidity").getValue(String.class).toString();
+                dbtemp = dataSnapshot.child(dbSub).child("Temp").getValue(String.class).toString();
+                mxlevel = dataSnapshot.child(dbSub).child("MaxHeight").getValue(String.class).toString();
+                mxhumi = dataSnapshot.child(dbSub).child("MaxHumidity").getValue(String.class).toString();
+                mxtemp = dataSnapshot.child(dbSub).child("MaxTemp").getValue(String.class).toString();
+                mnhumi = dataSnapshot.child(dbSub).child("MinHumidity").getValue(String.class).toString();
+                mntemp = dataSnapshot.child(dbSub).child("MinTemp").getValue(String.class).toString();
                 //Debug.setText(mxlevel);
                 SetRiverLevel();
                 SetHumiTemp();
@@ -160,12 +157,12 @@ public class MainTask extends AppCompatActivity {
         });
     }
     public void SetRiverLevel(){
-        double maxH=Double.parseDouble(mxlevel);
+        double mxH = Double.parseDouble(mxlevel);
         double level = Double.parseDouble(dbwater_level);
-        double waterLevel = maxH-level;
+        double waterLevel = level;
         if (waterLevel<0)
             waterLevel=0;
-        double progress = (waterLevel/maxH)*100;
+        double progress = (waterLevel/mxH)*100;
         int x = (int)progress;
         if(x>100)
             x=100;
@@ -176,7 +173,7 @@ public class MainTask extends AppCompatActivity {
             waterLevel = Math.round(waterLevel*100.0)/100.0;
             water_level=String.valueOf(waterLevel)+" Inch";
         }
-        else if(dbunitH.equals("foot")){
+        else if(dbunitH.equals("Foot")){
             waterLevel = waterLevel/30.48;
             waterLevel = Math.round(waterLevel*100.0)/100.0;
             water_level=String.valueOf(waterLevel)+" Foot";
@@ -236,8 +233,8 @@ public class MainTask extends AppCompatActivity {
         }
     }
     public void SetReadings(){
-        String Details = "\n\n\n Device Info                 : Flood Detecting System\n HC-SR04 Sensor        : "+water_level+"\n Rain Sensor(Analog) : " + dbRainA +
-                "\n Rain Sensor(Digital)  : "+dbRainD+"\n Max Temperature      : 50°C\n Min Temperature       : 10°C\n Max Humidity             : 95%\n Min Humidity              : 45%\n Location                       :"+dbLol ;
+        String Details = "\n\n\n Device ID                      : "+dbSub+"\n HC-SR04 Sensor        : "+water_level+"\n Rain Sensor(Analog) : " + dbRainA +
+                "\n Rain Sensor(Digital)  : "+dbRainD+"\n Max Temperature      : "+mxtemp+"\n Min Temperature       : "+mntemp+"\n Max Humidity             : "+mxhumi+"\n Min Humidity              : "+mnhumi+"\n Location                       :"+dbLol ;
         t4.setText(Details);
     }
     @Override
@@ -252,6 +249,11 @@ public class MainTask extends AppCompatActivity {
             Intent intent = new Intent(MainTask.this,Preference.class);
             startActivity(intent);
         }
+        if (item.getItemId() == R.id.dlog){
+            Intent intent = new Intent(MainTask.this,LogTable.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
     private void init() {
@@ -282,20 +284,19 @@ public class MainTask extends AppCompatActivity {
         setOnClickListner();
         //Debug = findViewById(R.id.debug);
     }
-
     private void setOnClickListner() {
         listner = new bAdapterClass.BAdapterClickListner() {
             @Override
             public void onClick(View v, int position) {
                 myRef = FirebaseDatabase.getInstance().getReference().child("Select");
                 myRef.child("Area").setValue(list.get(position).getDeviceArea());
+                myRef.child("SubArea").setValue(list.get(position).getDeviceID());
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
             }
         };
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -306,9 +307,38 @@ public class MainTask extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists())
                     {
+                        bData B=new bData();
                         list = new ArrayList<>();
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
-                            list.add(ds.getValue(bData.class));
+                            B = ds.getValue(bData.class);
+                            if (dbunitH.equals("Inch")){
+                                double x = Double.parseDouble(B.Level);
+                                x=x/2.54;
+                                x = Math.round(x*100.0)/100.0;
+                                B.Level=String.valueOf(x);
+                                B.Level +=" I";
+                                list.add(B);
+                            }
+                            else if (dbunitH.equals("Foot")){
+                                double x = Double.parseDouble(B.Level);
+                                x=x/30.48;
+                                x = Math.round(x*100.0)/100.0;
+                                B.Level=String.valueOf(x);
+                                B.Level +=" F";
+                                list.add(B);
+                            }
+                            else if (dbunitH.equals("M")){
+                                double x = Double.parseDouble(B.Level);
+                                x=x/100.00;
+                                x = Math.round(x*100.0)/100.0;
+                                B.Level=String.valueOf(x);
+                                B.Level +=" M";
+                                list.add(B);
+                            }
+                            else{
+                                B.Level+=" cm";
+                                list.add(B);
+                            }
                         }
                         bAdapterClass BAdapterClass = new bAdapterClass(list, listner);
                         rv.setAdapter(BAdapterClass);
@@ -316,7 +346,7 @@ public class MainTask extends AppCompatActivity {
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    Toast.makeText(MainTask.this, "databaseError.getMessage().toString()", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainTask.this, "databaseError", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -341,7 +371,6 @@ public class MainTask extends AppCompatActivity {
             }
         });
     }
-
     private void SwipLayout(){
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -352,7 +381,6 @@ public class MainTask extends AppCompatActivity {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){

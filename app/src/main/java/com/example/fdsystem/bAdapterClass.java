@@ -45,6 +45,21 @@ public class bAdapterClass extends RecyclerView.Adapter<bAdapterClass.MyBViewHol
         holder.tv_upd.setText(list.get(position).getUp_down());
         String up_d = list.get(position).getUp_down();
 
+       /* if (mainTask.dbunitH.equals("Inch")){
+            level = level/2.54;
+            level = Math.round(level*100.0)/100.0;
+            holder.tv_wlevel.setText(String.valueOf(level)+" I");
+        }
+        else if(mainTask.dbunitH.equals("foot")){
+            level = level/30.48;
+            level = Math.round(level*100.0)/100.0;
+            holder.tv_wlevel.setText(String.valueOf(level)+" F");
+        }else if(mainTask.dbunitH.equals("M")){
+            level = level/100;
+            level = Math.round(level*100.0)/100.0;
+            holder.tv_wlevel.setText(String.valueOf(level)+" F");
+        }*/
+
         if (up_d.equals("▲▲")){
                 up.setSpan(fcsRed, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 holder.tv_upd.setText(up);

@@ -9,11 +9,6 @@
         app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/sort"
-        android:orderInCategory="100"
-        android:title="Sort by water level"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_help"
         android:orderInCategory="100"
         android:title="Help"

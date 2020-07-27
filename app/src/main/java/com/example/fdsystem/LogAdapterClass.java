@@ -47,6 +47,7 @@ public class LogAdapterClass extends RecyclerView.Adapter<LogAdapterClass.myView
         holder.tv_area.setText(list.get(position).getDeviceArea());
         holder.tv_level.setText(list.get(position).getLevel());
         String up_d = list.get(position).getUp_down();
+
         if (up_d.equals("▲▲")){
             up.setSpan(fcsRed, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             holder.tv_ud.setText(up);

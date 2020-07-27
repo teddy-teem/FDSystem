@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,16 +33,21 @@ public class MainActivity extends AppCompatActivity {
     String adpass,adname;
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
+    TextView tv;
     long backpretime;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         login = (Button) findViewById(R.id.login);
         username = (EditText) findViewById(R.id.user_txt);
         userpass = (EditText) findViewById(R.id.pass_txt);
         reg = (Button) findViewById(R.id.reg_btn);
+
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -75,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (x.equals(adname) && y.equals(adpass)) {
                         progressDialog.dismiss();
+
+
+
+
+
+
                         Intent intent = new Intent(MainActivity.this, MainTask.class);
                         startActivity(intent);
                         finish();
@@ -84,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Put ID and Password please! ", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }
+            }
+        });
+        reg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,Register.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

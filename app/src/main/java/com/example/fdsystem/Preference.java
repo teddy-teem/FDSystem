@@ -24,6 +24,7 @@ public class Preference extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference().child("Select");
     MainTask mainTask = new MainTask();
+    String unitHeight;
     public  String x,y;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class Preference extends AppCompatActivity {
                         select_h.setText(menuItem.getTitle());
                         y = menuItem.getTitle().toString();
                         myRef.child("unitHeight").setValue(y);
+                        unitHeight=y;
                         return  true;
                     }
                 });
