@@ -22,13 +22,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
-    EditText userName, userPassword, userEmail, adminPass,userConfirmPassword;
+    EditText userName, userPassword, userEmail, adminPass,userConfirmPassword, userMob;
     Button back, reg;
     DatabaseReference myRef;
     FirebaseAuth firebaseAuth;
     String adpass;
     int cnt=0;
     ProgressDialog progressDialog;
+    FirebaseDatabase rootNode;
+    DatabaseReference ref;
+    String mobNum, Name, Email, Pass;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,7 @@ public class Register extends AppCompatActivity {
         userConfirmPassword= (EditText) findViewById(R.id.editconfirmpass);
         userEmail = (EditText) findViewById(R.id.editemail);
         adminPass = (EditText) findViewById(R.id.editadminpass);
+        userMob = findViewById(R.id.editmob);
         back = (Button) findViewById(R.id.back);
         reg = (Button) findViewById(R.id.register);
 
@@ -74,22 +79,26 @@ public class Register extends AppCompatActivity {
                 String ADMIN = adminPass.getText().toString();
                 if(validate() && ADMIN.equals(adpass)){
                     ///Upload Data to database..
-                    final String user_email = userEmail.getText().toString().trim();
+                    final String user_mobile = userMob.getText().toString().trim();
                     final String password  = userConfirmPassword.getText().toString().trim();
                     final String c_pass = userPassword.getText().toString().trim();
                     // Write a message to the database
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     // final DatabaseReference Ref = database.getReference().child("Users");
 
-                    firebaseAuth.createUserWithEmailAndPassword(user_email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    firebaseAuth.createUserWithEmailAndPassword(user_mobile,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful() && cnt<5) {
                                 Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
-                                /*Ref.child(user_email).setValue(user_email);
-                                Ref.child(user_email).child("id").setValue(user_email);
-                                Ref.child(user_email).child("password").setValue(c_pass);
-                                Ref.child(user_email).child("name").setValue(userName.getText().toString());*/
+                                rootNode = FirebaseDatabase.getInstance();
+                                ref = rootNode.getReference("AllUsers");
+                                mobNum = userMob.getText().toString().trim();
+                                Name = userName.getText().toString().trim();
+                                Email = userEmail.getText().toString().trim();
+                                Pass = userConfirmPassword.getText().toString().trim();
+                                Users users = new Users(Email, Name, Pass, mobNum);
+                                ref.child(mobNum).setValue(users);
                                 cnt++;
                                 progressDialog.dismiss();
                                 startActivity(new Intent(Register.this,MainActivity.class));
@@ -128,5 +137,11 @@ public class Register extends AppCompatActivity {
 
         }
         return res;
+    }
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

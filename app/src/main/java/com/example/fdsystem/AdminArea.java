@@ -1,9 +1,13 @@
 package com.example.fdsystem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +26,7 @@ public class AdminArea extends AppCompatActivity {
    private DatabaseReference ref,myref;
    private String dbpass,new_AdminID, new_Pass;
    private TextView tv;
+   int size=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +36,6 @@ public class AdminArea extends AppCompatActivity {
         OldPass =findViewById(R.id.edit_oldpass);
         changeAdminInfo=findViewById(R.id.btnchangeadmininfo);
         back = findViewById(R.id.back);
-
-
         ref= FirebaseDatabase.getInstance().getReference().child("Users");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -77,5 +80,27 @@ public class AdminArea extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.admin_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    /*@Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.user_list){
+            Intent intent = new Intent(AdminArea.this,UsersList.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -1,7 +1,7 @@
 package com.example.fdsystem;
 
 public class LogData {
-    String DeviceID, DeviceArea, Level, up_down, maxHeight;
+     String DeviceID, DeviceArea, Level, up_down, maxHeight;
     public String getDeviceID() {
         return DeviceID;
     }

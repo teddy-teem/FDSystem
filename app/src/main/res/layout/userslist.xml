@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:id="@+id/cardlayout"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/d_name"
+            android:layout_width="80dp"
+            android:layout_marginLeft="5dp"
+            android:text="Jahid Hasan"
+            android:textSize="12dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/d_emil"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:text="jahidrsn@gmail.com"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/d_mob"
+            android:layout_width="80dp"
+            android:layout_marginLeft="5dp"
+            android:text="01767363427"
+            android:textSize="12dp"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/d_pass"
+            android:layout_width="80dp"
+            android:layout_marginLeft="5dp"
+            android:textSize="15dp"
+            android:text="tung2020"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

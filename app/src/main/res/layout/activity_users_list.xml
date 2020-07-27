@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="LogTable">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:background="#8C8C83"
+            android:text="Name"
+            android:textAlignment="center"
+            android:textColor="#EF8A8A"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:background="#8C8C83"
+            android:text="Email"
+            android:textAlignment="center"
+            android:textColor="#EF8A8A"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:background="#8C8C83"
+            android:text="Mobile No"
+            android:textAlignment="center"
+            android:textColor="#EF8A8A"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="#8C8C83"
+            android:text="Passord"
+            android:textAlignment="center"
+            android:textColor="#EF8A8A"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/user_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#C6C4C4"></androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>
