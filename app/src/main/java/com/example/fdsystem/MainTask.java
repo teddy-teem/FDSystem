@@ -29,6 +29,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class MainTask extends AppCompatActivity {
-    DatabaseReference myRef,ref;
+    DatabaseReference myRef,ref,reference;
     public String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub, mxlevel,mxhumi,mxtemp,mnhumi,mntemp;
     String water_level,temp;
     String FiArea,SubArea;
@@ -72,11 +74,14 @@ public class MainTask extends AppCompatActivity {
     SearchView srView;
     bAdapterClass BAdapterClass;
     private bAdapterClass.BAdapterClickListner listner;
+    String amI="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_task);
+        amI = getIntent().getExtras().getString("amIadmin","0");
+
         init();
         SwipLayout();
         tbUpDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -251,6 +256,31 @@ public class MainTask extends AppCompatActivity {
         if (item.getItemId() == R.id.dlog){
             Intent intent = new Intent(MainTask.this,LogTable.class);
             startActivity(intent);
+        }
+        if (item.getItemId() == R.id.logout){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(MainTask.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        if (item.getItemId() == R.id.help){
+            Intent intent = new Intent(MainTask.this,Help.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.about){
+            Intent intent = new Intent(MainTask.this,About.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.user_menu){
+
+            if (amI.equals("1")){
+                Toast.makeText(getApplicationContext(),"You are Admin", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Intent intent = new Intent(MainTask.this,WelcomeProfile.class);
+                startActivity(intent);
+            }
+
         }
 
         return super.onOptionsItemSelected(item);

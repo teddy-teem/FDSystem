@@ -11,16 +11,16 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/d_name"
-            android:layout_width="80dp"
+            android:id="@+id/d_name_"
+            android:layout_width="70dp"
             android:layout_marginLeft="5dp"
             android:text="Jahid Hasan"
             android:textSize="12dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/d_emil"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:text="jahidrsn@gmail.com"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/d_mob"
-            android:layout_width="80dp"
+            android:layout_width="78dp"
             android:layout_marginLeft="5dp"
             android:text="01767363427"
             android:textSize="12dp"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/d_pass"
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_marginLeft="5dp"
             android:textSize="15dp"
             android:text="tung2020"

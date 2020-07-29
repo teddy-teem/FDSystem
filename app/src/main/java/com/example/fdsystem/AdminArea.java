@@ -1,8 +1,10 @@
 package com.example.fdsystem;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,9 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,28 +32,42 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class AdminArea extends AppCompatActivity {
-    private EditText adminID,adminPass,OldPass;
-  private   Button changeAdminInfo,back;
-   private DatabaseReference ref,myref;
-   private String dbpass,new_AdminID, new_Pass;
-   private TextView tv;
-   int size=0;
+    private EditText adminID,adminPass1,adminPass2,OldPass;
+    private   Button changeAdminInfo_btn,back_btn,back2_btn,userList_btn;
+    private DatabaseReference ref;
+    private String dbpass,new_AdminID, new_Pass;
+    private TextView tvGoto,tvT;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_area);
         adminID = findViewById(R.id.edit_AdminId);
-        adminPass = findViewById(R.id.edit_adminpass);
+        adminPass1 = findViewById(R.id.edit_adminpass);
         OldPass =findViewById(R.id.edit_oldpass);
-        changeAdminInfo=findViewById(R.id.btnchangeadmininfo);
-        back = findViewById(R.id.back);
+        changeAdminInfo_btn=findViewById(R.id.btnchangeadmininfo);
+        back_btn = findViewById(R.id.back);
+        back2_btn = findViewById(R.id.back2);
+        adminPass2 = findViewById(R.id.admin_pass);
+        userList_btn = findViewById(R.id.user_list_btn);
+        tvGoto = findViewById(R.id.go_to_btn);
+        tvT = findViewById(R.id.tv_text);
+        tvGoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvT.setVisibility(View.VISIBLE);
+                adminPass2.setVisibility(View.VISIBLE);
+                back2_btn.setVisibility(View.VISIBLE);
+                userList_btn.setVisibility(View.VISIBLE);
+            }
+        });
         ref= FirebaseDatabase.getInstance().getReference().child("Users");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                dbpass = dataSnapshot.child("pass").getValue(String.class).toString();
+                dbpass = dataSnapshot.child("admin").child("password").getValue(String.class).toString();
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -50,19 +75,20 @@ public class AdminArea extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
             }
         });
-        myref= FirebaseDatabase.getInstance().getReference("Users");
-
-        changeAdminInfo.setOnClickListener(new View.OnClickListener() {
+        changeAdminInfo_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new_AdminID = adminID.getText().toString();
-                new_Pass = adminPass.getText().toString();
+                new_Pass = adminPass1.getText().toString();
                 if(new_AdminID.equals("") || new_Pass.equals("")){
                     Toast.makeText(getApplicationContext(), "fill all the field", Toast.LENGTH_SHORT).show();
                 }
                 else if (dbpass.equals(OldPass.getText().toString())) {
-                    myref.child("admin").setValue(new_AdminID);
-                    myref.child("pass").setValue(new_Pass);
+                    ref.child("admin").child("email").setValue(new_AdminID);
+                    ref.child("admin").child("password").setValue(new_Pass);
+                    Intent intent = new Intent(AdminArea.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
                     Toast.makeText(getApplicationContext(), "Successfully Changed", Toast.LENGTH_SHORT).show();
                 }
                 else{
@@ -71,7 +97,7 @@ public class AdminArea extends AppCompatActivity {
             }
         });
 
-        back.setOnClickListener(new View.OnClickListener() {
+        back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AdminArea.this, MainActivity.class);
@@ -79,7 +105,28 @@ public class AdminArea extends AppCompatActivity {
                 finish();
             }
         });
-
+        back2_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        userList_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String temp = adminPass2.getText().toString().trim();
+                if (dbpass.equals(temp)){
+                    Intent intent = new Intent(AdminArea.this, UsersList.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else{
+                    Toast.makeText(AdminArea.this,"worng pass", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,16 +134,18 @@ public class AdminArea extends AppCompatActivity {
         menuInflater.inflate(R.menu.admin_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.user_list){
-            Intent intent = new Intent(AdminArea.this,UsersList.class);
+        if (item.getItemId() == R.id.admin_help){
+            Intent intent = new Intent(AdminArea.this,Help.class);
             startActivity(intent);
         }
-
+        if (item.getItemId() == R.id.admin_menu_logout){
+            Intent intent = new Intent(AdminArea.this,MainActivity.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
-    }*/
-
+    }
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);

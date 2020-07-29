@@ -2,19 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/actionsearch"
-        android:title="Search"
-        android:icon="@android:drawable/ic_menu_search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="ifRoom"
-        />
-    <item
-        android:id="@+id/datalog_menu_help"
+        android:id="@+id/admin_help"
         android:orderInCategory="100"
         android:title="Help"
         app:showAsAction="never" />
     <item
-        android:id="@+id/datalog_menu_logout"
+        android:id="@+id/wc_menu_about"
+        android:orderInCategory="100"
+        android:title="About"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/wc_menu_logout"
         android:orderInCategory="100"
         android:title="Log Out"
         app:showAsAction="never" />

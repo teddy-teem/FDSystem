@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="70dp"
             android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:background="#8C8C83"
@@ -24,7 +24,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:background="#8C8C83"
@@ -34,7 +34,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="78dp"
             android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:background="#8C8C83"
@@ -44,7 +44,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"

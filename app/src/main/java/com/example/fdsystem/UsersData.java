@@ -1,16 +1,25 @@
 package com.example.fdsystem;
 
-public class Users {
-     String email, name, password, mobile;
+public class UsersData {
+    String email, name, password, mobile, status;
 
-    public Users() {
+    public UsersData() {
     }
 
-    public Users(String email, String name, String password, String mobile) {
+    public UsersData(String email, String name, String password, String mobile, String status) {
         this.email = email;
         this.name = name;
         this.password = password;
         this.mobile = mobile;
+        this.status=status;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getEmail() {

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -93,8 +94,13 @@ public class LogTable extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_help){
-            Intent intent = new Intent(LogTable.this,LogHelp.class);
+        if (item.getItemId() == R.id.datalog_menu_help){
+            Intent intent = new Intent(LogTable.this, Help.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.datalog_menu_logout){
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(LogTable.this, MainActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

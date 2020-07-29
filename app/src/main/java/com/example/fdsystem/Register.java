@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,11 +31,12 @@ public class Register extends AppCompatActivity {
     DatabaseReference myRef;
     FirebaseAuth firebaseAuth;
     String adpass;
-    int cnt=0;
+    TextView tv;
     ProgressDialog progressDialog;
     FirebaseDatabase rootNode;
     DatabaseReference ref;
-    String mobNum, Name, Email, Pass;
+    String uMobNum, uName, uEmail, uPass;
+    DatabaseReference fRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +50,16 @@ public class Register extends AppCompatActivity {
         userMob = findViewById(R.id.editmob);
         back = (Button) findViewById(R.id.back);
         reg = (Button) findViewById(R.id.register);
+       // tv = findViewById(R.id.debug);
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        fRef = FirebaseDatabase.getInstance().getReference().child("Users");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                adpass = dataSnapshot.child("pass").getValue(String.class).toString();
+                adpass = dataSnapshot.child("admin").child("password").getValue(String.class);
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -77,44 +84,47 @@ public class Register extends AppCompatActivity {
                 progressDialog.setMessage("Wait while");
                 progressDialog.show();
                 String ADMIN = adminPass.getText().toString();
-                if(validate() && ADMIN.equals(adpass)){
+                if(validate() && ADMIN.equals(adpass)) {
                     ///Upload Data to database..
-                    final String user_mobile = userMob.getText().toString().trim();
-                    final String password  = userConfirmPassword.getText().toString().trim();
-                    final String c_pass = userPassword.getText().toString().trim();
-                    // Write a message to the database
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    // final DatabaseReference Ref = database.getReference().child("Users");
+                    uEmail = userEmail.getText().toString().trim();
+                    uPass = userConfirmPassword.getText().toString().trim();
+                    uMobNum = userMob.getText().toString().trim();
+                    uName = userName.getText().toString().trim();
+                    if(uPass.length()<6){
+                        Toast.makeText(getApplicationContext(), "Failed Attempt/password have to be 6+ character", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        firebaseAuth.createUserWithEmailAndPassword(uEmail, uPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    UsersData usersData = new UsersData(uEmail,uName, uPass, uMobNum, "0");
 
-                    firebaseAuth.createUserWithEmailAndPassword(user_mobile,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful() && cnt<5) {
-                                Toast.makeText(getApplicationContext(), "Successfully Registered", Toast.LENGTH_SHORT).show();
-                                rootNode = FirebaseDatabase.getInstance();
-                                ref = rootNode.getReference("AllUsers");
-                                mobNum = userMob.getText().toString().trim();
-                                Name = userName.getText().toString().trim();
-                                Email = userEmail.getText().toString().trim();
-                                Pass = userConfirmPassword.getText().toString().trim();
-                                Users users = new Users(Email, Name, Pass, mobNum);
-                                ref.child(mobNum).setValue(users);
-                                cnt++;
-                                progressDialog.dismiss();
-                                startActivity(new Intent(Register.this,MainActivity.class));
-                                finish();
+                                    FirebaseDatabase.getInstance().getReference("Users")
+                                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .setValue(usersData).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(getApplicationContext(), "Succesfully Created", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                    progressDialog.dismiss();
+                                    startActivity(new Intent(Register.this, MainActivity.class));
+                                    finish();
+                                }
+                                else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Failed Attempt/u have to use unique Email id", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else{
-                                progressDialog.dismiss();
-                                Toast.makeText(getApplicationContext(),"Failed Attempt",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+                        });
+                    }
+                    }
                 else{
-                    progressDialog.dismiss();
-                    Toast.makeText(getApplicationContext(),"Admin Pass wrong",Toast.LENGTH_SHORT).show();
-                }
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Admin Pass wrong", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
     }
@@ -137,6 +147,25 @@ public class Register extends AppCompatActivity {
 
         }
         return res;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.admin_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.admin_help){
+            Intent intent = new Intent(Register.this,Help.class);
+            startActivity(intent);
+        }
+        if (item.getItemId() == R.id.admin_menu_logout){
+            Intent intent = new Intent(Register.this,MainActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
     @Override
     public void onBackPressed() {

@@ -59,10 +59,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                adpass = dataSnapshot.child("pass").getValue(String.class).toString();
-                adname = dataSnapshot.child("admin").getValue(String.class).toString();
+                adpass = dataSnapshot.child("admin").child("password").getValue(String.class).toString();
+                adname = dataSnapshot.child("admin").child("email").getValue(String.class).toString();
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -83,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (x.equals(adname) && y.equals(adpass)) {
                         progressDialog.dismiss();
-
                         Intent intent = new Intent(MainActivity.this, MainTask.class);
+                        intent.putExtra("amIadmin", "1");
                         startActivity(intent);
                         finish();
                     }
-                    validate(x,y);
+                    else
+                     validate(x,y);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Put ID and Password please! ", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             progressDialog.dismiss();
-                            Intent intent = new Intent(MainActivity.this,MainTask.class);
+                            Intent intent = new Intent(MainActivity.this,WelcomeProfile.class);
+                            intent.putExtra("amIadmin", "0");
                             startActivity(intent);
                             finish();
                         } else {
