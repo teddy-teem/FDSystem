@@ -163,6 +163,7 @@ public class LogTable extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainTask.class);
+        intent.putExtra("amIadmin", "0");
         startActivity(intent);
         finish();
     }
