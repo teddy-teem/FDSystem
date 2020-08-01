@@ -15,11 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UsersAdapterClass extends RecyclerView.Adapter<UsersAdapterClass.myViewHolder>  {
-    ArrayList<UsersData> list;
+    ArrayList<uData> list;
 
 
 
-    public UsersAdapterClass(ArrayList<UsersData> mlist){
+    public UsersAdapterClass(ArrayList<uData> mlist){
         list=mlist;
     }
 
@@ -33,11 +33,12 @@ public class UsersAdapterClass extends RecyclerView.Adapter<UsersAdapterClass.my
 
     @Override
     public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
-        holder.tv_name.setText(list.get(position).getName());
+        String s = list.get(position).getStatus();
+        holder.tv_name.setText(list.get(position).getName()+s);
         holder.tv_email.setText(list.get(position).getEmail());
         holder.tv_mob.setText(list.get(position).getMobile());
         holder.tv_pass.setText(list.get(position).getPassword());
-        String s = list.get(position).getStatus(); //// For verified id count.......... later will be improved
+         //// For verified id count.......... later will be improved
     }
     @Override
     public int getItemCount() {

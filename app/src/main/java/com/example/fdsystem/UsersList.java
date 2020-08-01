@@ -27,7 +27,7 @@ public class UsersList extends AppCompatActivity {
     RecyclerView recyclerView;
     DatabaseReference ref, myRef;
     FirebaseDatabase database;
-    ArrayList<UsersData> list=new ArrayList<>();
+    ArrayList<uData> list=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +41,7 @@ public class UsersList extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         database = FirebaseDatabase.getInstance();
-        ref = database.getReference().child("Users");
+        ref = database.getReference("Users");
     }
     @Override
     protected void onStart() {
@@ -54,7 +54,7 @@ public class UsersList extends AppCompatActivity {
                     {
                         list.clear();
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
-                                list.add(ds.getValue(UsersData.class));
+                            list.add(ds.getValue(uData.class));
 
                         }
                         UsersAdapterClass usersAdapterClass = new UsersAdapterClass(list);
@@ -81,8 +81,8 @@ public class UsersList extends AppCompatActivity {
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                ArrayList<UsersData> mylist = new ArrayList<>();
-                for (UsersData ld: list){
+                ArrayList<uData> mylist = new ArrayList<>();
+                for (uData ld: list){
                     if (ld.getName().toLowerCase().contains(s.toLowerCase())){
                         mylist.add(ld);
                     }

@@ -90,15 +90,16 @@ public class Register extends AppCompatActivity {
                     uPass = userConfirmPassword.getText().toString().trim();
                     uMobNum = userMob.getText().toString().trim();
                     uName = userName.getText().toString().trim();
-                    if(uPass.length()<6){
-                        Toast.makeText(getApplicationContext(), "Failed Attempt/password have to be 6+ character", Toast.LENGTH_SHORT).show();
+                    if(uPass.length()<6 || uEmail.isEmpty() || uName.isEmpty() || uMobNum.isEmpty() || uPass.isEmpty()){
+                        Toast.makeText(getApplicationContext(), "All Fields are required/password should be 6+ character", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                     else {
                         firebaseAuth.createUserWithEmailAndPassword(uEmail, uPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    UsersData usersData = new UsersData(uEmail,uName, uPass, uMobNum, "0");
+                                    UsersData usersData = new UsersData("Dhaka", uEmail, uMobNum, uName, uPass, "✖", "Dhaka1","CM", "°C");
 
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -106,12 +107,12 @@ public class Register extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             Toast.makeText(getApplicationContext(), "Succesfully Created", Toast.LENGTH_SHORT).show();
+                                            progressDialog.dismiss();
+                                            startActivity(new Intent(Register.this, RegisterMessage.class));
+                                            finish();
 
                                         }
                                     });
-                                    progressDialog.dismiss();
-                                    startActivity(new Intent(Register.this, MainActivity.class));
-                                    finish();
                                 }
                                 else {
                                     progressDialog.dismiss();

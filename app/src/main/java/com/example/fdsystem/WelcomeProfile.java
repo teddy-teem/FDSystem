@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,13 +31,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class WelcomeProfile extends AppCompatActivity {
-   private TextView tvMob,tvEmail, tvName, tv;
-   private EditText pass;
-   private Button mainTask, delete, comDelete;
-   private FirebaseAuth auth;
-   private FirebaseUser user;
-   DatabaseReference reference;
-   String rmEm, stEm;
+    private TextView tvMob,tvEmail, tvName, tv;
+    private EditText pass;
+    private Button mainTask, delete, comDelete;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    DatabaseReference reference;
+    String rmEm;
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class WelcomeProfile extends AppCompatActivity {
         tvName=findViewById(R.id.user_name_tv);
         tvMob = findViewById(R.id.user_mob_tv);
         comDelete = findViewById(R.id.delete_btn_temp);
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -91,41 +94,28 @@ public class WelcomeProfile extends AppCompatActivity {
                                     }
                                 }
                             })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(WelcomeProfile.this, "Failed to verify", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(WelcomeProfile.this, "Failed to verify", Toast.LENGTH_SHORT).show();
+                                }
+                            });
                     ;
                 }
             });
         }
+
+
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                rmEm= user.getUid();
                 if (!pass.getText().toString().isEmpty()) {
-                    AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), pass.getText().toString().trim());
-                    user.reauthenticate(credential)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                rmEm=user.getEmail();
-                                                Delete(user.getUid());
-                                                auth.signOut();
-                                                Intent intent = new Intent(WelcomeProfile.this, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                                Toast.makeText(WelcomeProfile.this, "Deleted", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
-                                }
-                            });
+                    Intent intent = new Intent(WelcomeProfile.this, DeleteId.class);
+                    intent.putExtra("deleteUID", rmEm);
+                    intent.putExtra("AccPass", pass.getText().toString());
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -145,15 +135,6 @@ public class WelcomeProfile extends AppCompatActivity {
                 finish();
             }
         });
-    }
-    public  void Delete(String s){
-        reference.child(s).setValue(null)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(WelcomeProfile.this, "Done", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

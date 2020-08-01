@@ -11,6 +11,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +27,7 @@ public class Preference extends AppCompatActivity {
     MainTask mainTask = new MainTask();
     String unitHeight;
     public  String x,y;
+    String iAm,node;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,24 +36,47 @@ public class Preference extends AppCompatActivity {
         select_h = findViewById(R.id.unit2);
         c_temp = findViewById(R.id.textView1);
         c_dist = findViewById(R.id.textView2);
+        iAm = getIntent().getExtras().getString("iAmAdmin","0");
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        if (iAm.equals("0")){
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("Select");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                x = dataSnapshot.child("unitTemp").getValue(String.class);
-                y = dataSnapshot.child("unitHeight").getValue(String.class);
-                c_temp.setText(x);
-                c_dist.setText(y);
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    x = dataSnapshot.child( FirebaseAuth.getInstance().getCurrentUser().getUid()).child("unitT").getValue(String.class);
+                    y = dataSnapshot.child( FirebaseAuth.getInstance().getCurrentUser().getUid()).child("unitH").getValue(String.class);
+                    c_temp.setText(x);
+                    c_dist.setText(y);
 
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                }
+            });
+            node=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+        else {
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    x = dataSnapshot.child("admin").child("unitT").getValue(String.class);
+                    y = dataSnapshot.child("admin").child("unitH").getValue(String.class);
+                    c_temp.setText(x);
+                    c_dist.setText(y);
+
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                }
+            });
+            node="admin";
+        }
 
         select_temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +89,7 @@ public class Preference extends AppCompatActivity {
                         Toast.makeText(Preference.this, menuItem.getTitle()+" unit setted", Toast.LENGTH_SHORT).show();
                         select_temp.setText(menuItem.getTitle());
                         x = menuItem.getTitle().toString();
-                        myRef.child("unitTemp").setValue(x);
+                        myRef.child(node).child("unitT").setValue(x);
 
                         return  true;
                     }
@@ -83,7 +108,7 @@ public class Preference extends AppCompatActivity {
                         Toast.makeText(Preference.this, menuItem.getTitle()+" unit setted", Toast.LENGTH_SHORT).show();
                         select_h.setText(menuItem.getTitle());
                         y = menuItem.getTitle().toString();
-                        myRef.child("unitHeight").setValue(y);
+                        myRef.child(node).child("unitH").setValue(y);
                         unitHeight=y;
                         return  true;
                     }

@@ -29,7 +29,7 @@ public class LogTable extends AppCompatActivity {
     ArrayList<LogData> list=new ArrayList<>();;
     int isSort=0;
     LogData logData;
-    String dbunitH;
+    String dbunitH, amI;
     //SwipeRefreshLayout refreshLayout;
 
     @Override
@@ -37,20 +37,36 @@ public class LogTable extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_table);
         init();
-        myRef = FirebaseDatabase.getInstance().getReference().child("Select");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                dbunitH = dataSnapshot.child("unitHeight").getValue(String.class).toString();
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
-            }
-        });
+        amI = getIntent().getExtras().getString("amIadmin","0");
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        if (amI.equals("1")){
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    dbunitH = dataSnapshot.child("admin").child("unitH").getValue(String.class).toString();
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else{
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dbunitH = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("unitH").getValue(String.class).toString();
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
     public  void init(){
         recyclerView = findViewById(R.id.myrecyclerview);
@@ -158,7 +174,6 @@ public class LogTable extends AppCompatActivity {
                 }
             });
         }
-
     }
     @Override
     public void onBackPressed() {

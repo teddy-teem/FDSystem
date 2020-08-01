@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -64,7 +65,7 @@ public class MainTask extends AppCompatActivity {
     private ToggleButton tbUpDown;
     private ListView listView;
     private TextView txtCantante, txtCancion;
-    private ContentLoadingProgressBar progbar;
+    ProgressDialog progressDialog;
     long backpretime;
     EditText searchArea;
     SwipeRefreshLayout refreshLayout;
@@ -80,6 +81,12 @@ public class MainTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_task);
+
+
+        progressDialog = new ProgressDialog(MainTask.this);
+        progressDialog.setMessage("Deleting......");
+        progressDialog.show();
+
         amI = getIntent().getExtras().getString("amIadmin","0");
 
         init();
@@ -111,25 +118,47 @@ public class MainTask extends AppCompatActivity {
             }
         });
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("Select");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                dbLol = dataSnapshot.child("Area").getValue(String.class).toString();
-                dbunitT = dataSnapshot.child("unitTemp").getValue(String.class).toString();
-                dbunitH = dataSnapshot.child("unitHeight").getValue(String.class).toString();
-                dbSub = dataSnapshot.child("SubArea").getValue(String.class).toString();
-                txtCantante.setText(dbLol);
-                txtCancion.setText(dbSub);
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
-            }
-        });
+        myRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+        if (amI.equals("1")){
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    dbLol = dataSnapshot.child("admin").child("area").getValue(String.class).toString();
+                    dbunitT = dataSnapshot.child("admin").child("unitT").getValue(String.class).toString();
+                    dbunitH = dataSnapshot.child("admin").child("unitH").getValue(String.class).toString();
+                    dbSub = dataSnapshot.child("admin").child("subArea").getValue(String.class).toString();
+                    txtCantante.setText(dbLol);
+                    txtCancion.setText(dbSub);
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else{
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    dbLol = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("area").getValue(String.class).toString();
+                    dbunitT = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("unitT").getValue(String.class).toString();
+                    dbunitH = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("unitH").getValue(String.class).toString();
+                    dbSub = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("subArea").getValue(String.class).toString();
+                    txtCantante.setText(dbLol);
+                    txtCancion.setText(dbSub);
+                }
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    //Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Readings");
         myRef.addValueEventListener(new ValueEventListener() {
@@ -159,6 +188,8 @@ public class MainTask extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
             }
         });
+
+        progressDialog.dismiss();
     }
     public void SetRiverLevel(){
         double mxH = Double.parseDouble(mxlevel);
@@ -250,12 +281,31 @@ public class MainTask extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.preference){
-            Intent intent = new Intent(MainTask.this,Preference.class);
-            startActivity(intent);
+
+            if (amI.equals("1")){
+                Intent intent = new Intent(MainTask.this,Preference.class);
+                intent.putExtra("iAmAdmin", "1");
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(MainTask.this,Preference.class);
+                intent.putExtra("iAmAdmin", "0");
+                startActivity(intent);
+            }
+
         }
         if (item.getItemId() == R.id.dlog){
-            Intent intent = new Intent(MainTask.this,LogTable.class);
-            startActivity(intent);
+            if (amI.equals("1")){
+                Intent intent = new Intent(MainTask.this,LogTable.class);
+                intent.putExtra("amIadmin", "1");
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(MainTask.this,LogTable.class);
+                intent.putExtra("amIadmin", "0");
+                startActivity(intent);
+            }
+
         }
         if (item.getItemId() == R.id.logout){
             FirebaseAuth.getInstance().signOut();
@@ -291,7 +341,6 @@ public class MainTask extends AppCompatActivity {
         this.tbUpDown = findViewById(R.id.toggleButton);
         this.txtCantante = findViewById(R.id.txtCantante);
         this.txtCancion = findViewById(R.id.txtCancion);
-        this.progbar = findViewById(R.id.progbar);
         mWaveLoadingView = (WaveLoadingView)findViewById(R.id.waveload);
         t1 = (TextView)findViewById(R.id.textView1);
         t2 = (TextView)findViewById(R.id.textView2);
@@ -317,9 +366,16 @@ public class MainTask extends AppCompatActivity {
         listner = new bAdapterClass.BAdapterClickListner() {
             @Override
             public void onClick(View v, int position) {
-                myRef = FirebaseDatabase.getInstance().getReference().child("Select");
-                myRef.child("Area").setValue(list.get(position).getDeviceArea());
-                myRef.child("SubArea").setValue(list.get(position).getDeviceID());
+                myRef = FirebaseDatabase.getInstance().getReference().child("Users");
+                if (amI.equals("1")){
+                    myRef.child("admin").child("area").setValue(list.get(position).getDeviceArea());
+                    myRef.child("admin").child("subArea").setValue(list.get(position).getDeviceID());
+                }
+                else{
+
+                    myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("area").setValue(list.get(position).getDeviceArea());
+                    myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("subArea").setValue(list.get(position).getDeviceID());
+                }
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
