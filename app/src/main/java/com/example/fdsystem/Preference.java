@@ -2,6 +2,7 @@ package com.example.fdsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,10 +119,18 @@ public class Preference extends AppCompatActivity {
         });
 
     }
-    @Override
+   /* @Override
     public void onRestart() {
         super.onRestart();
         //When BACK BUTTON is pressed, the activity on the stack is restarted
         //Do what you want on the refresh procedure here
+
+    }*/
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainTask.class);
+        intent.putExtra("amIadmin", iAm);
+        startActivity(intent);
+        finish();
     }
 }

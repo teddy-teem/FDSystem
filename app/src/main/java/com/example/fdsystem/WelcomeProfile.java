@@ -39,6 +39,7 @@ public class WelcomeProfile extends AppCompatActivity {
     DatabaseReference reference;
     String rmEm;
     ImageView imageView;
+    long backpretime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,8 +161,18 @@ public class WelcomeProfile extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (backpretime+2000 > System.currentTimeMillis()){
+            super.onBackPressed();
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory( Intent.CATEGORY_HOME );
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+            finish();
+            return;
+        }
+        else{
+            Toast.makeText(getBaseContext(),"Press back again to exit",Toast.LENGTH_SHORT).show();
+        }
+        backpretime = System.currentTimeMillis();
     }
 }

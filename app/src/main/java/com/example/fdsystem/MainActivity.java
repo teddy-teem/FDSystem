@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             progressDialog.dismiss();
                             Intent intent = new Intent(MainActivity.this,WelcomeProfile.class);
-                            intent.putExtra("amIadmin", "0");
                             startActivity(intent);
                             finish();
                         } else {
@@ -141,6 +140,11 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){
             super.onBackPressed();
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory( Intent.CATEGORY_HOME );
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(homeIntent);
+            finish();
             return;
         }
         else{

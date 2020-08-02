@@ -82,11 +82,6 @@ public class MainTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_task);
 
-
-        progressDialog = new ProgressDialog(MainTask.this);
-        progressDialog.setMessage("Deleting......");
-        progressDialog.show();
-
         amI = getIntent().getExtras().getString("amIadmin","0");
 
         init();
@@ -189,7 +184,6 @@ public class MainTask extends AppCompatActivity {
             }
         });
 
-        progressDialog.dismiss();
     }
     public void SetRiverLevel(){
         double mxH = Double.parseDouble(mxlevel);
@@ -347,7 +341,7 @@ public class MainTask extends AppCompatActivity {
         t3 = (TextView)findViewById(R.id.textView3);
         t4 = (TextView)findViewById(R.id.textView);
         refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swip);
-       // searchArea = (EditText)findViewById(R.id.editSearch);
+        // searchArea = (EditText)findViewById(R.id.editSearch);
         HRain.setSpan(fcsRed, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Rain.setSpan(fcsYello, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         NRain.setSpan(fcsBlue, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -377,6 +371,7 @@ public class MainTask extends AppCompatActivity {
                     myRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("subArea").setValue(list.get(position).getDeviceID());
                 }
                 Intent intent = getIntent();
+                intent.putExtra("amIadmin", amI);
                 finish();
                 startActivity(intent);
             }
@@ -454,6 +449,7 @@ public class MainTask extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 Intent intent = getIntent();
+                intent.putExtra("amIadmin", amI);
                 finish();
                 startActivity(intent);
             }
