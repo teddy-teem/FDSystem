@@ -97,7 +97,7 @@ public class AdminArea extends AppCompatActivity {
                    // Toast.makeText(getApplicationContext(), dbpass, Toast.LENGTH_SHORT).show();
               }
                 else{
-                    Toast.makeText(getApplicationContext(), "Sorry wrong Password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No Internet / Sorry wrong Password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -119,7 +119,7 @@ public class AdminArea extends AppCompatActivity {
                     finish();
                     Toast.makeText(getApplicationContext(), "Successfully Changed", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Sorry Wrong Password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No Internet / Sorry Wrong Password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -149,7 +149,7 @@ public class AdminArea extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(AdminArea.this, "worng pass", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminArea.this, "No Internet/worng pass", Toast.LENGTH_SHORT).show();
                 }
             }
         });

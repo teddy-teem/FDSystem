@@ -101,9 +101,10 @@ public class UsersList extends AppCompatActivity {
             Intent intent = new Intent(UsersList.this,Help.class);
             startActivity(intent);
         }
-        if (item.getItemId() == R.id.admin_menu_logout){
+        if (item.getItemId() == R.id.datalog_menu_logout){
             Intent intent = new Intent(UsersList.this,MainActivity.class);
             startActivity(intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -3,6 +3,7 @@ package com.example.fdsystem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,15 +32,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class WelcomeProfile extends AppCompatActivity {
-    private TextView tvMob,tvEmail, tvName, tv;
-    private EditText pass;
-    private Button mainTask, delete, comDelete;
+    private TextView tvMob,tvEmail, tvName, tv, changePassTv, DeleteIDTv;
+    private EditText pass, newChangePass, oldChangePass;
+    private Button mainTask, delete, changePassBtn;
     private FirebaseAuth auth;
     private FirebaseUser user;
     DatabaseReference reference;
-    String rmEm;
+    String rmEm, oldPass="", newPass="",dbpass;
     ImageView imageView;
     long backpretime;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,11 @@ public class WelcomeProfile extends AppCompatActivity {
         tvEmail=findViewById(R.id.user_email_tv);
         tvName=findViewById(R.id.user_name_tv);
         tvMob = findViewById(R.id.user_mob_tv);
-        comDelete = findViewById(R.id.delete_btn_temp);
+        DeleteIDTv = findViewById(R.id.delete_btn_temp);
+        changePassBtn = findViewById(R.id.pass_change_btn);
+        changePassTv = findViewById(R.id.change_pass_txt);
+        newChangePass = findViewById(R.id.new_pass_change_edit);
+        oldChangePass=findViewById(R.id.old_pass_change_edit);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -66,6 +72,7 @@ public class WelcomeProfile extends AppCompatActivity {
                 // whenever data at this location is updated.
                 tvName.setText(dataSnapshot.child(user.getUid()).child("name").getValue(String.class).toString());
                 tvMob.setText(dataSnapshot.child(user.getUid()).child("mobile").getValue(String.class).toString());
+                dbpass=dataSnapshot.child(user.getUid()).child("password").getValue(String.class).toString();
             }
             @Override
             public void onCancelled(DatabaseError error) {
@@ -106,6 +113,70 @@ public class WelcomeProfile extends AppCompatActivity {
             });
         }
 
+        changePassTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newChangePass.setVisibility(View.VISIBLE);
+                oldChangePass.setVisibility(View.VISIBLE);
+                changePassBtn.setVisibility(View.VISIBLE);
+            }
+        });
+
+        changePassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog = new ProgressDialog(WelcomeProfile.this);
+                progressDialog.setMessage("Changing......");
+                progressDialog.show();
+                oldPass = oldChangePass.getText().toString();
+                newPass = newChangePass.getText().toString().trim();
+                if (oldPass.equals(dbpass)){
+                    AuthCredential credential = EmailAuthProvider
+                            .getCredential(user.getEmail(), dbpass);
+
+// Prompt the user to re-provide their sign-in credentials
+                    if (!newPass.isEmpty()) {
+                        user.reauthenticate(credential)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        reference.child(user.getUid()).child("password").setValue(newPass);
+                                                        Intent intent = new Intent(WelcomeProfile.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                        Toast.makeText(getApplicationContext(), "Password Changed", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), "Error Occuared", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Authenticatin Failed Failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Fill all the fields", Toast.LENGTH_SHORT).show();
+                    }
+
+
+
+
+
+
+
+
+                }
+            }
+        });
 
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,7 +191,7 @@ public class WelcomeProfile extends AppCompatActivity {
                 }
             }
         });
-        comDelete.setOnClickListener(new View.OnClickListener() {
+        DeleteIDTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pass.setVisibility(View.VISIBLE);

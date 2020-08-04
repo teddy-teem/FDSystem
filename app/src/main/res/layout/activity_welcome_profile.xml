@@ -23,8 +23,6 @@
                 android:id="@+id/pro_image"
                 android:background="#32599A"
                 android:layout_height="120dp"/>
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,35 +94,89 @@
                 android:background="#D7EDEF"
                 android:layout_height="100dp"/>
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/data_page_btn"
-                android:layout_width="match_parent"
-                android:layout_margin="40dp"
-                android:background="@drawable/round_btn"
-                android:text="Data Page"
-                android:textStyle="bold"
-                android:textSize="30dp"
-                android:textColor="#FF0435"
-                android:layout_height="150dp"/>
-        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <Button
-                android:id="@+id/delete_btn_temp"
+                android:id="@+id/data_page_btn"
                 android:layout_width="match_parent"
-                android:textStyle="bold"
-                android:layout_marginLeft="50dp"
+                android:layout_height="150dp"
+                android:layout_margin="40dp"
+                android:background="@drawable/round_btn"
+                android:text="Data Page"
+                android:textColor="#FF0435"
+                android:textSize="30dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/change_pass_txt"
+                android:layout_width="match_parent"
+                android:text="Change Password"
                 android:layout_marginRight="50dp"
-                android:layout_marginTop="50dp"
-                android:text="Delete"
+                android:layout_marginLeft="50dp"
+                android:textAlignment="center"
+                android:padding="10dp"
+                android:textColor="#0E2BCD"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:background="#D7EDEF"
+                android:layout_height="40dp"/>
+            <EditText
+                android:id="@+id/new_pass_change_edit"
+                android:hint="New Pass"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/old_pass_change_edit"
+                android:hint="Old Password"
+                android:layout_marginRight="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/pass_change_btn"
+                android:layout_marginRight="50dp"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="50dp"
+                android:textStyle="bold"
+                android:text="Change"
+                android:visibility="gone"
                 android:background="#FBEBEB"
                 android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/delete_btn_temp"
+                android:layout_width="match_parent"
+                android:text="Delete Account"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:textAlignment="center"
+                android:padding="10dp"
+                android:textColor="#0E2BCD"
+                android:textStyle="bold"
+                android:typeface="serif"
+                android:background="#D7EDEF"
+                android:layout_height="40dp"/>
             <EditText
                 android:id="@+id/pass_edit"
                 android:visibility="gone"
