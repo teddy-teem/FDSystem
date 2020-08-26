@@ -5,8 +5,8 @@
 #include<time.h>
 #define FIREBASE_HOST "fd-system-17f93.firebaseio.com"
 #define FIREBASE_AUTH "Qc6qQjPKGDTxKnh4aH5ksJht7fleZz8PRnZcZ55I"
-#define WIFI_SSID "Teemo"  
-#define WIFI_PASSWORD "teem3005"
+#define WIFI_SSID "faruk"  
+#define WIFI_PASSWORD "12345678"
 #define DHTTYPE DHT22   // DHT 22
 #define DHTPIN D1          // Node MCU ESP8266 (D1)
 
@@ -74,7 +74,7 @@ void setup() {
 
 void loop(){
   //Device Information to Firebasse
-  Firebase.setString("Readings/Khulna1/DeviceArea", "Dhaka");
+  Firebase.setString("Readings/Khulna1/DeviceArea", "Khulna");
   Firebase.setString("Readings/Khulna1/DeviceID", "Khulna1");
 
 
