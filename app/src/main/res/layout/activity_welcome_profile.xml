@@ -178,7 +178,7 @@
                 android:background="#D7EDEF"
                 android:layout_height="40dp"/>
             <EditText
-                android:id="@+id/pass_edit"
+                android:id="@+id/crnt_pass_edit"
                 android:visibility="gone"
                 android:hint="password to delete id"
                 android:layout_width="match_parent"

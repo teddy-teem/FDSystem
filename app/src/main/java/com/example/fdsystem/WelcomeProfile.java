@@ -33,12 +33,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class WelcomeProfile extends AppCompatActivity {
     private TextView tvMob,tvEmail, tvName, tv, changePassTv, DeleteIDTv;
-    private EditText pass, newChangePass, oldChangePass;
+    private EditText CrntPass, newChangePass, oldChangePass;
     private Button mainTask, delete, changePassBtn;
     private FirebaseAuth auth;
     private FirebaseUser user;
     DatabaseReference reference;
-    String rmEm, oldPass="", newPass="",dbpass;
+    String rmEm, oldPass="", newPass="",dbpass, crntPass="", dbCrntPass;
     ImageView imageView;
     long backpretime;
     ProgressDialog progressDialog;
@@ -47,7 +47,7 @@ public class WelcomeProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_profile);
         tv = findViewById(R.id.tv_mess);
-        pass = findViewById(R.id.pass_edit);
+        CrntPass = findViewById(R.id.crnt_pass_edit);
         mainTask = findViewById(R.id.data_page_btn);
         delete = findViewById(R.id.delete_btn);
         tvEmail=findViewById(R.id.user_email_tv);
@@ -83,7 +83,7 @@ public class WelcomeProfile extends AppCompatActivity {
 
         if (user.isEmailVerified()){
             tv.setText("You are Varified User, Welcome to the Apps");
-            reference.child(user.getUid()).child("status").setValue("1");
+            reference.child(user.getUid()).child("status").setValue("✓");
             mainTask.setEnabled(true);
         }
         else{
@@ -125,9 +125,7 @@ public class WelcomeProfile extends AppCompatActivity {
         changePassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressDialog = new ProgressDialog(WelcomeProfile.this);
-                progressDialog.setMessage("Changing......");
-                progressDialog.show();
+
                 oldPass = oldChangePass.getText().toString();
                 newPass = newChangePass.getText().toString().trim();
                 if (oldPass.equals(dbpass)){
@@ -136,6 +134,9 @@ public class WelcomeProfile extends AppCompatActivity {
 
 // Prompt the user to re-provide their sign-in credentials
                     if (!newPass.isEmpty()) {
+                        progressDialog = new ProgressDialog(WelcomeProfile.this);
+                        progressDialog.setMessage("Changing......");
+                        progressDialog.show();
                         user.reauthenticate(credential)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -168,12 +169,6 @@ public class WelcomeProfile extends AppCompatActivity {
                     }
 
 
-
-
-
-
-
-
                 }
             }
         });
@@ -182,19 +177,28 @@ public class WelcomeProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 rmEm= user.getUid();
-                if (!pass.getText().toString().isEmpty()) {
-                    Intent intent = new Intent(WelcomeProfile.this, DeleteId.class);
-                    intent.putExtra("deleteUID", rmEm);
-                    intent.putExtra("AccPass", pass.getText().toString());
-                    startActivity(intent);
-                    finish();
+                crntPass = CrntPass.getText().toString();
+                if (!crntPass.isEmpty()) {
+                    if (crntPass.equals(dbpass)) {
+                        Intent intent = new Intent(WelcomeProfile.this, DeleteId.class);
+                        intent.putExtra("deleteUID", rmEm);
+                        intent.putExtra("AccPass", crntPass);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Wrogn Pass", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Empty Field", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         DeleteIDTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pass.setVisibility(View.VISIBLE);
+                CrntPass.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
             }
         });

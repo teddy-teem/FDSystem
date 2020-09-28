@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -38,16 +39,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainTask extends AppCompatActivity {
-    DatabaseReference myRef,ref,reference;
-    public String dbwater_level,dbRainD, dbRainA,dbhum,dbtemp,dbLol,dbunitT,dbunitH,dbSub, mxlevel,mxhumi,mxtemp,mnhumi,mntemp;
-    String water_level,temp;
-    String FiArea,SubArea;
-    String[] Location;
-    ArrayList<String> lista = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    TextView info1, info2, info3, info4, info5, info6, info7, info8, info9, info10, info11;
+    DatabaseReference myRef,ref;
+    String currentDateTimeString;
+    public String dbLol,dbunitT,dbunitH,dbSub;
+    double dbwater_level,dbhum,dbtemp,mxlevel,mxhumi,mxtemp,mnhumi,mntemp;
+    int dbRainA,dbRainD ;
+    String temp, dbtime, dbRiver;
     WaveLoadingView mWaveLoadingView;
     TextView t1,t2,t3,t4,Debug;
     SpannableString HRain = new SpannableString("Heavvy Raining");
@@ -63,12 +66,8 @@ public class MainTask extends AppCompatActivity {
     private BottomSheetBehavior bottomSheetBehavior;
     private LinearLayout linearLayoutBSheet;
     private ToggleButton tbUpDown;
-    private ListView listView;
     private TextView txtCantante, txtCancion;
-    ProgressDialog progressDialog;
     long backpretime;
-    EditText searchArea;
-    SwipeRefreshLayout refreshLayout;
     RecyclerView rv;
     FirebaseDatabase database;
     ArrayList<bData> list;
@@ -85,7 +84,7 @@ public class MainTask extends AppCompatActivity {
         amI = getIntent().getExtras().getString("amIadmin","0");
 
         init();
-        SwipLayout();
+        //SwipLayout();
         tbUpDown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -114,8 +113,6 @@ public class MainTask extends AppCompatActivity {
         });
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-
         if (amI.equals("1")){
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -161,17 +158,21 @@ public class MainTask extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                dbwater_level = dataSnapshot.child(dbSub).child("Level").getValue(String.class).toString();
-                dbRainA = dataSnapshot.child(dbSub).child("RainA").getValue(String.class).toString();
-                dbRainD = dataSnapshot.child(dbSub).child("RainD").getValue(String.class).toString();
-                dbhum = dataSnapshot.child(dbSub).child("Humidity").getValue(String.class).toString();
-                dbtemp = dataSnapshot.child(dbSub).child("Temp").getValue(String.class).toString();
-                mxlevel = dataSnapshot.child(dbSub).child("MaxHeight").getValue(String.class).toString();
-                mxhumi = dataSnapshot.child(dbSub).child("MaxHumidity").getValue(String.class).toString();
-                mxtemp = dataSnapshot.child(dbSub).child("MaxTemp").getValue(String.class).toString();
-                mnhumi = dataSnapshot.child(dbSub).child("MinHumidity").getValue(String.class).toString();
-                mntemp = dataSnapshot.child(dbSub).child("MinTemp").getValue(String.class).toString();
-                //Debug.setText(mxlevel);
+
+               dbwater_level = (double) dataSnapshot.child(dbSub).child("Level").getValue(Double.class);
+               dbRainA = (int)dataSnapshot.child(dbSub).child("RainA").getValue(Integer.class);
+                dbRainD = (int)dataSnapshot.child(dbSub).child("RainD").getValue(Integer.class);
+                dbhum = (double)dataSnapshot.child(dbSub).child("Humidity").getValue(Double.class);
+                dbtemp =(double) dataSnapshot.child(dbSub).child("Temp").getValue(Double.class);
+                mxlevel =(double) dataSnapshot.child(dbSub).child("MaxHeight").getValue(Double.class);
+                mxhumi = (double)dataSnapshot.child(dbSub).child("MaxHumidity").getValue(Double.class);
+                mxtemp = (double)dataSnapshot.child(dbSub).child("MaxTemp").getValue(Double.class);
+                mnhumi = (double)dataSnapshot.child(dbSub).child("MinHumidity").getValue(Double.class);
+                mntemp = (double)dataSnapshot.child(dbSub).child("MinTemp").getValue(Double.class);
+                dbtime= dataSnapshot.child(dbSub).child("time").getValue(String.class);
+                dbRiver= dataSnapshot.child(dbSub).child("river").getValue(String.class);
+              //  String s = String.valueOf(currentDateTimeString.charAt(17));
+
                 SetRiverLevel();
                 SetHumiTemp();
                 SetRainMessage();
@@ -186,37 +187,37 @@ public class MainTask extends AppCompatActivity {
 
     }
     public void SetRiverLevel(){
-        double mxH = Double.parseDouble(mxlevel);
-        double level = Double.parseDouble(dbwater_level);
-        double waterLevel = level;
-        if (waterLevel<0)
-            waterLevel=0;
-        double progress = (waterLevel/mxH)*100;
+        double mxH = mxlevel;
+        double x_;
+        String prntLevel;
+        if (dbwater_level<0.0)
+            x_=0.0;
+        double progress = (dbwater_level/mxH)*100;
         int x = (int)progress;
         if(x>100)
             x=100;
         mWaveLoadingView.setProgressValue(x);
 
         if (dbunitH.equals("Inch")){
-            waterLevel = waterLevel/2.54;
-            waterLevel = Math.round(waterLevel*100.0)/100.0;
-            water_level=String.valueOf(waterLevel)+" Inch";
+            dbwater_level = dbwater_level/ 2.54;
+            dbwater_level= Math.round(dbwater_level*100.0)/100.0;
+            prntLevel=String.valueOf(dbwater_level)+" Inch";
         }
         else if(dbunitH.equals("Foot")){
-            waterLevel = waterLevel/30.48;
-            waterLevel = Math.round(waterLevel*100.0)/100.0;
-            water_level=String.valueOf(waterLevel)+" Foot";
+            dbwater_level = dbwater_level/30.48;
+            dbwater_level= Math.round(dbwater_level*100.0)/100.0;
+            prntLevel=String.valueOf(dbwater_level)+" Foot";
         }
         else if(dbunitH.equals("M")){
-            waterLevel = waterLevel/100;
-            waterLevel = Math.round(waterLevel*100.0)/100.0;
-            water_level=String.valueOf(waterLevel)+" Metre";
+            dbwater_level = dbwater_level/100;
+            dbwater_level = Math.round(dbwater_level*100.0)/100.0;
+            prntLevel=String.valueOf(dbwater_level)+" Metre";
         }
         else{
-            waterLevel = Math.round(waterLevel*100.0)/100.0;
-            water_level=String.valueOf(waterLevel)+" Cm";
+            dbwater_level = Math.round(dbwater_level*100.0)/100.0;
+            prntLevel=String.valueOf(dbwater_level)+" Cm";
         }
-        mWaveLoadingView.setCenterTitle(water_level);
+        mWaveLoadingView.setCenterTitle(prntLevel);
         mWaveLoadingView.setTopTitle("");
         if (x>=100)
             mWaveLoadingView.setBottomTitle("OverFlow");
@@ -226,13 +227,13 @@ public class MainTask extends AppCompatActivity {
     }
     public  void SetHumiTemp(){
         if (dbunitT.equals("°F")){
-            double Temp = Double.parseDouble(dbtemp);
+            Double Temp = Double.valueOf(dbtemp);
             Temp=(Temp*(9.00/5.00))+32;
             Temp = Math.round(Temp*100.0)/100.0;
             temp = String.valueOf(Temp)+" °F";
         }
         else if(dbunitT.equals("°K")){
-            double Temp = Double.parseDouble(dbtemp);
+            Double Temp = Double.valueOf(dbtemp);
             Temp=Temp + 273.15;
             Temp = Math.round(Temp*100.0)/100.0;
             temp = String.valueOf(Temp)+" °K";
@@ -244,7 +245,7 @@ public class MainTask extends AppCompatActivity {
         t2.setText(dbhum+" %");
     }
     public void SetRainMessage(){
-        int a = Integer.parseInt(dbRainA);
+        Integer a = Integer.valueOf(dbRainA);
         if(a<=20){
             t3.setText(NoRain);
         }
@@ -262,9 +263,65 @@ public class MainTask extends AppCompatActivity {
         }
     }
     public void SetReadings(){
-        String Details = "\n\n\n Device ID                      : "+dbSub+"\n HC-SR04 Sensor        : "+water_level+"\n Rain Sensor(Analog) : " + dbRainA +
-                "\n Rain Sensor(Digital)  : "+dbRainD+"\n Max Temperature      : "+mxtemp+"\n Min Temperature       : "+mntemp+"\n Max Humidity             : "+mxhumi+"\n Min Humidity              : "+mnhumi+"\n Location                       :"+dbLol ;
-        t4.setText(Details);
+
+        if(dbunitH.equals("M")){
+            dbwater_level = dbwater_level/100;
+            mxlevel = mxlevel/100;
+            dbwater_level = Math.round(dbwater_level*100.0)/100.0;
+            mxlevel= Math.round(mxlevel*100.0)/100.0;
+            info3.setText(String.valueOf(mxlevel)+"M");
+            info4.setText(String.valueOf(dbwater_level)+"M");
+        }
+        else if(dbunitH.equals("Foot")){
+            dbwater_level = dbwater_level/30.48;
+            mxlevel = mxlevel/30.48;
+            dbwater_level= Math.round(dbwater_level*100.0)/100.0;
+            mxlevel= Math.round(mxlevel*100.0)/100.0;
+            info3.setText(String.valueOf(mxlevel)+"Feet");
+            info4.setText(String.valueOf(dbwater_level)+"Feet");
+        }
+        else if(dbunitH.equals("Inch")){
+            dbwater_level = dbwater_level/ 2.54;
+            mxlevel = mxlevel/ 2.54;
+            dbwater_level= Math.round(dbwater_level*100.0)/100.0;
+            mxlevel= Math.round(mxlevel*100.0)/100.0;
+            info3.setText(String.valueOf(mxlevel)+"Inchi");
+            info4.setText(String.valueOf(dbwater_level)+"Inchi");
+        }
+        else{
+            info3.setText(String.valueOf(mxlevel)+"CM");
+            info4.setText(String.valueOf(dbwater_level)+"CM");
+        }
+
+
+        if(dbunitT.equals("°K")) {
+            mxtemp = (mxtemp + 273.15);
+            mxtemp = Math.round(mxtemp * 100.0) / 100.0;
+            mntemp = (mntemp + 273.15);
+            mntemp = Math.round(mntemp * 100.0) / 100.0;
+            info7.setText(String.valueOf(mxtemp)+"°K");
+            info8.setText(String.valueOf(mntemp)+"°K");
+        }
+        else if(dbunitT.equals("°F")){
+            mxtemp = (mxtemp * (9.00 / 5.00)) + 32;
+            mxtemp = Math.round(mxtemp * 100.0) / 100.0;
+            mntemp = (mntemp * (9.00 / 5.00)) + 32;
+            mntemp = Math.round(mntemp * 100.0) / 100.0;
+            info7.setText(String.valueOf(mxtemp)+"°F");
+            info8.setText(String.valueOf(mntemp)+"°F");
+        }
+        else {
+            info7.setText(String.valueOf(mxtemp)+"°C");
+            info8.setText(String.valueOf(mntemp)+"°C");
+        }
+        info1.setText(dbSub);
+        info2.setText(dbRiver);
+        info5.setText(dbLol);
+        info6.setText(dbRainA + "%");
+
+        info9.setText(String.valueOf(mxhumi));
+        info10.setText(String.valueOf(mnhumi));
+        info11.setText(String.valueOf(dbtime));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -330,6 +387,18 @@ public class MainTask extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void init() {
+        info1 = findViewById(R.id.info1);
+        info2 = findViewById(R.id.info2);
+        info3 = findViewById(R.id.info3);
+        info4 = findViewById(R.id.info4);
+        info5 = findViewById(R.id.info5);
+        info6 = findViewById(R.id.info6);
+        info7 = findViewById(R.id.info7);
+        info8 = findViewById(R.id.info8);
+        info9 = findViewById(R.id.info9);
+        info10 = findViewById(R.id.info10);
+        info11 = findViewById(R.id.info11);
+
         this.linearLayoutBSheet = findViewById(R.id.bottomSheet);
         this.bottomSheetBehavior = BottomSheetBehavior.from(linearLayoutBSheet);
         this.tbUpDown = findViewById(R.id.toggleButton);
@@ -339,8 +408,6 @@ public class MainTask extends AppCompatActivity {
         t1 = (TextView)findViewById(R.id.textView1);
         t2 = (TextView)findViewById(R.id.textView2);
         t3 = (TextView)findViewById(R.id.textView3);
-        t4 = (TextView)findViewById(R.id.textView);
-        refreshLayout = (SwipeRefreshLayout)findViewById(R.id.swip);
         // searchArea = (EditText)findViewById(R.id.editSearch);
         HRain.setSpan(fcsRed, 0, 14, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         Rain.setSpan(fcsYello, 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -380,7 +447,6 @@ public class MainTask extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
         if (ref != null){
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -392,31 +458,32 @@ public class MainTask extends AppCompatActivity {
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
                             B = ds.getValue(bData.class);
                             if (dbunitH.equals("Inch")){
-                                double x = Double.parseDouble(B.Level);
+                                double x = Double.valueOf(B.Level);
                                 x=x/2.54;
                                 x = Math.round(x*100.0)/100.0;
-                                B.Level=String.valueOf(x);
-                                B.Level +=" I";
+                                B.Level=x;
+                                B.Unit_h ="I";
                                 list.add(B);
                             }
                             else if (dbunitH.equals("Foot")){
-                                double x = Double.parseDouble(B.Level);
+                                double x = Double.valueOf(B.Level);
                                 x=x/30.48;
                                 x = Math.round(x*100.0)/100.0;
-                                B.Level=String.valueOf(x);
-                                B.Level +=" F";
+                                B.Level=x;
+                                B.Unit_h +="F";
                                 list.add(B);
                             }
                             else if (dbunitH.equals("M")){
-                                double x = Double.parseDouble(B.Level);
+                                double x = Double.valueOf(B.Level);
                                 x=x/100.00;
                                 x = Math.round(x*100.0)/100.0;
-                                B.Level=String.valueOf(x);
-                                B.Level +=" M";
+                                B.Level=x;
+                                B.Unit_h ="M";
                                 list.add(B);
                             }
                             else{
-                                B.Level+=" cm";
+                               B.Unit_h="CM";
+                                B.Level = Math.round(B.Level*100.0)/100.0;
                                 list.add(B);
                             }
                         }
@@ -444,17 +511,6 @@ public class MainTask extends AppCompatActivity {
             }
         });
     }
-    private void SwipLayout(){
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Intent intent = getIntent();
-                intent.putExtra("amIadmin", amI);
-                finish();
-                startActivity(intent);
-            }
-        });
-    }
     @Override
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){
@@ -467,4 +523,5 @@ public class MainTask extends AppCompatActivity {
         backpretime = System.currentTimeMillis();
 
     }
+
 }

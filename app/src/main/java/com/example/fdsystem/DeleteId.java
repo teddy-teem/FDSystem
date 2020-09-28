@@ -46,13 +46,25 @@ public class DeleteId extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    Delete();
                                     Toast.makeText(DeleteId.this, "Delete Done/Exiting", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Toast.makeText(DeleteId.this, "Unsuccesful Deleting / Exiting", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                    Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                                    homeIntent.addCategory( Intent.CATEGORY_HOME );
+                                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(homeIntent);
+                                    finish();
                                 }
                             }
                         });
                     }
                 });
 
+    }
+    public void Delete(){
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.child(id).setValue(null)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -68,5 +80,6 @@ public class DeleteId extends AppCompatActivity {
 
                     }
                 });
+
     }
 }

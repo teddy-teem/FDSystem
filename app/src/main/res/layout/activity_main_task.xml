@@ -1,138 +1,492 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/swip"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainTask">
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <me.itangqi.waveloadingview.WaveLoadingView
-            android:id="@+id/waveload"
-            android:layout_width="match_parent"
-            android:layout_height="155dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="120dp"
-            app:wlv_borderColor="#0D8FD5"
-            app:wlv_borderWidth="10dp"
-            app:wlv_progressValue="10"
-            app:wlv_round_rectangle="false"
-            app:wlv_shapeType="rectangle"
-            app:wlv_titleBottomColor="#554343"
-            app:wlv_titleBottomSize="14sp"
-            app:wlv_titleBottomStrokeColor="@android:color/holo_blue_dark"
-            app:wlv_titleCenterColor="#5E3426"
-            app:wlv_titleCenterSize="20sp"
-            app:wlv_titleCenterStrokeColor="@android:color/holo_blue_dark"
-            app:wlv_titleCenterStrokeWidth="3dp"
-            app:wlv_titleTopColor="#512315"
-            app:wlv_titleTopSize="14sp"
-            app:wlv_titleTopStrokeColor="@android:color/holo_blue_dark"
-            app:wlv_triangle_direction="north"
-            app:wlv_waveAmplitude="90"
-            app:wlv_waveColor="@android:color/holo_blue_dark" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="270dp"
-            android:layout_marginTop="1dp"
-            android:drawableLeft="@drawable/ic_hot"
-            android:textColor="#FD8C12"
-            android:textStyle="bold"
-
-            android:background="@drawable/round_rect1"
-            android:text="Temperature " />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginLeft="270dp"
-            android:background="@drawable/round_rect1"
-            android:drawableLeft="@drawable/ic_humidity"
-            android:text="   Humidity "
-            android:textColor="#007BFF"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="270dp"
-            android:layout_marginTop="26dp"
-            android:text="00.00°C"
-            android:textAlignment="center"
-            android:textColor="#9C2D24"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView2"
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="120dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/round_rect1"
+                android:drawableLeft="@drawable/ic_hot"
+                android:text="Temperature "
+                android:textColor="#FD8C12"
+                android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="150dp"
+                    android:layout_marginRight="2dp"
+                    android:background="@drawable/round_rect1"
+                    android:drawableLeft="@drawable/ic_humidity"
+                    android:text="   Humidity "
+                    android:textColor="#007BFF"
+                    android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="270dp"
-            android:layout_marginTop="26dp"
-            android:text="000.00%"
-            android:textAlignment="center"
-            android:textColor="#9C9C08"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView"
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="120dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="2dp"
+                android:text="00.00°C"
+                android:textAlignment="center"
+                android:textColor="#9C2D24"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="150dp"
+                android:layout_marginRight="2dp"
+                android:text="000.00%"
+                android:textAlignment="center"
+                android:textColor="#9C9C08"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Not Raining"
+                android:textAlignment="center"
+                android:textColor="#ff0000"
+                android:textSize="25dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <me.itangqi.waveloadingview.WaveLoadingView
+                android:id="@+id/waveload"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="0dp"
+                app:wlv_borderColor="#0D8FD5"
+                app:wlv_borderWidth="10dp"
+                app:wlv_progressValue="10"
+                app:wlv_round_rectangle="false"
+                app:wlv_shapeType="rectangle"
+                app:wlv_titleBottomColor="#554343"
+                app:wlv_titleBottomSize="14sp"
+                app:wlv_titleBottomStrokeColor="@android:color/holo_blue_dark"
+                app:wlv_titleCenterColor="#5E3426"
+                app:wlv_titleCenterSize="20sp"
+                app:wlv_titleCenterStrokeColor="@android:color/holo_blue_dark"
+                app:wlv_titleCenterStrokeWidth="3dp"
+                app:wlv_titleTopColor="#512315"
+                app:wlv_titleTopSize="14sp"
+                app:wlv_titleTopStrokeColor="@android:color/holo_blue_dark"
+                app:wlv_triangle_direction="north"
+                app:wlv_waveAmplitude="90"
+                app:wlv_waveColor="@android:color/holo_blue_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="56dp"
             android:background="@drawable/round_rect2"
-            android:text=""
-            android:textColor="#ffffff" />
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="146dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="11dp"
-            android:layout_marginTop="280dp"
-            android:ems="10"
-            android:enabled="false"
-            android:text="Readings"
-            android:textColor="#FFFF00" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="65dp"
-            android:textAlignment="center"
-            android:textSize="25dp"
-            android:textColor="#ff0000"
-            android:text="Not Raining" />
-        <include layout="@layout/bottom_sheet" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/round_rect1"
+                        android:text="Information "
+                        android:textAlignment="center"
+                        android:textColor="#053A35"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:typeface="monospace" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Device Id: "
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/info1"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="dhaka1 "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" River's Name: "
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info2"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="Padma "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" River's Depth: "
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info3"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="0.15m"
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Water Level: "
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info4"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="9.2cm "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Location: "
+                        android:textColor="#F5F8F8"
+                        android:typeface="serif"
+
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info5"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="Rajshahi"
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Rain's Speed: "
+                        android:textColor="#F5F8F8"
+                        android:typeface="serif"
+
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info6"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="58 (0 to 100 scale)"
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Maximum Temperature:"
+                        android:textColor="#F5F8F8"
+                        android:typeface="serif"
+
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info7"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="38°C "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Minimum Temperature:"
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info8"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="5°C "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Maximum Humidity:"
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info9"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="98% "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Minimum Humidity:"
+                        android:textColor="#F5F8F8"
+                        android:textSize="12dp"
+                        android:typeface="serif"
+
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info10"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="35% "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="160dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text=" Device's Time:"
+                        android:textColor="#F5F8F8" android:typeface="serif"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/info11"
+                        android:layout_width="150dp"
+                        android:layout_height="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="1dp"
+                        android:text="23:26 "
+                        android:textColor="#031053"
+                        android:textSize="12dp"
+                        android:textStyle="bold"
+                        android:typeface="serif" />
+                </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+    </ScrollView>
+    <include layout="@layout/bottom_sheet" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

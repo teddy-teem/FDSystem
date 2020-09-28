@@ -28,7 +28,7 @@
         <activity android:name=".AdminArea"
             android:label="Admin Area"/>
         <activity android:name=".Register"
-            android:label="Registratin"/>
+            android:label="Registration"/>
         <activity
             android:name=".MainTask"
             android:windowSoftInputMode="stateHidden"
@@ -48,7 +48,6 @@
         android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true" />
-
     <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

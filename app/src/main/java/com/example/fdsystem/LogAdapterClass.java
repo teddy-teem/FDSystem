@@ -18,7 +18,7 @@ public class LogAdapterClass extends RecyclerView.Adapter<LogAdapterClass.myView
     ArrayList<LogData> list;
     SpannableString up = new SpannableString("▲");
     SpannableString down = new SpannableString("▼");
-    ForegroundColorSpan fcsYello = new ForegroundColorSpan(Color.YELLOW);
+    ForegroundColorSpan fcsYello = new ForegroundColorSpan(Color.MAGENTA);
     ForegroundColorSpan fcsRed = new ForegroundColorSpan(Color.RED);
     ForegroundColorSpan fcsBlue = new ForegroundColorSpan(Color.BLUE);
     ForegroundColorSpan fcsGreen = new ForegroundColorSpan(Color.GREEN);
@@ -42,7 +42,7 @@ public class LogAdapterClass extends RecyclerView.Adapter<LogAdapterClass.myView
         final LogData logData = list.get(position);
         holder.tv_id.setText(list.get(position).getDeviceID());
         holder.tv_area.setText(list.get(position).getDeviceArea());
-        holder.tv_level.setText(list.get(position).getLevel());
+        holder.tv_level.setText(String.valueOf(list.get(position).getLevel())+list.get(position).getUnit_h());
         String up_d = list.get(position).getUp_down();
 
         if (up_d.equals("▲▲")){
