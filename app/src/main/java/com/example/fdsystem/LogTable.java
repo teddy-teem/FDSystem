@@ -136,7 +136,7 @@ public class LogTable extends AppCompatActivity {
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
                             D=ds.getValue(LogData.class);
                             if (dbunitH.equals("Inch")){
-                                double x = D.Level;
+                                Double x = D.Level;
                                 x=x/2.54;
                                 x = Math.round(x*100.0)/100.0;
                                 D.Level=x;
@@ -144,7 +144,7 @@ public class LogTable extends AppCompatActivity {
                                 list.add(D);
                             }
                             else if (dbunitH.equals("Foot")){
-                                double x = D.Level;
+                                Double x = D.Level;
                                 x=x/30.48;
                                 x = Math.round(x*100.0)/100.0;
                                 D.Level=x;
@@ -152,7 +152,7 @@ public class LogTable extends AppCompatActivity {
                                 list.add(D);
                             }
                             else if (dbunitH.equals("M")){
-                                double x = D.Level;
+                                Double x = D.Level;
                                 x=x/100.00;
                                 x = Math.round(x*100.0)/100.0;
                                 D.Level=x;

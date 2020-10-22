@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import me.itangqi.waveloadingview.WaveLoadingView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -158,19 +160,37 @@ public class MainTask extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-
-               dbwater_level = (double) dataSnapshot.child(dbSub).child("Level").getValue(Double.class);
-               dbRainA = (int)dataSnapshot.child(dbSub).child("RainA").getValue(Integer.class);
-                dbRainD = (int)dataSnapshot.child(dbSub).child("RainD").getValue(Integer.class);
-                dbhum = (double)dataSnapshot.child(dbSub).child("Humidity").getValue(Double.class);
-                dbtemp =(double) dataSnapshot.child(dbSub).child("Temp").getValue(Double.class);
-                mxlevel =(double) dataSnapshot.child(dbSub).child("MaxHeight").getValue(Double.class);
-                mxhumi = (double)dataSnapshot.child(dbSub).child("MaxHumidity").getValue(Double.class);
-                mxtemp = (double)dataSnapshot.child(dbSub).child("MaxTemp").getValue(Double.class);
-                mnhumi = (double)dataSnapshot.child(dbSub).child("MinHumidity").getValue(Double.class);
-                mntemp = (double)dataSnapshot.child(dbSub).child("MinTemp").getValue(Double.class);
+            try {
+                Double dwl, dh, dt, dmxl, dmxh, dmxt, dmnh, dmnt;
+                Integer drainA, drainD;
+                dwl =  dataSnapshot.child(dbSub).child("Level").getValue(Double.class);
+                drainA = dataSnapshot.child(dbSub).child("RainA").getValue(Integer.class);
+                drainD = dataSnapshot.child(dbSub).child("RainD").getValue(Integer.class);
+                dh = dataSnapshot.child(dbSub).child("Humidity").getValue(Double.class);
+                dt = dataSnapshot.child(dbSub).child("Temp").getValue(Double.class);
+                dmxl = dataSnapshot.child(dbSub).child("MaxHeight").getValue(Double.class);
+                dmxh = dataSnapshot.child(dbSub).child("MaxHumidity").getValue(Double.class);
+                dmxt = dataSnapshot.child(dbSub).child("MaxTemp").getValue(Double.class);
+                dmnh = dataSnapshot.child(dbSub).child("MinHumidity").getValue(Double.class);
+                dmnt = dataSnapshot.child(dbSub).child("MinTemp").getValue(Double.class);
                 dbtime= dataSnapshot.child(dbSub).child("time").getValue(String.class);
                 dbRiver= dataSnapshot.child(dbSub).child("river").getValue(String.class);
+
+                dbwater_level = dwl.doubleValue();
+                dbhum = dh.doubleValue();
+                dbtemp = dt.doubleValue();
+                mxlevel = dmxl.doubleValue();
+                mxhumi = dmxl.doubleValue();
+                mxtemp = dmxt.doubleValue();
+                mnhumi = dmnh.doubleValue();
+                mntemp = dmnt.doubleValue();
+                dbRainA = drainA.intValue();
+                dbRainD = drainD.intValue();
+
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), "Database Connection Error", Toast.LENGTH_SHORT).show();
+            }
+
               //  String s = String.valueOf(currentDateTimeString.charAt(17));
 
                 SetRiverLevel();
@@ -188,12 +208,10 @@ public class MainTask extends AppCompatActivity {
     }
     public void SetRiverLevel(){
         double mxH = mxlevel;
-        double x_;
         String prntLevel;
-        if (dbwater_level<0.0)
-            x_=0.0;
+
         double progress = (dbwater_level/mxH)*100;
-        int x = (int)progress;
+        int x = (int)(progress);
         if(x>100)
             x=100;
         mWaveLoadingView.setProgressValue(x);
@@ -211,7 +229,7 @@ public class MainTask extends AppCompatActivity {
         else if(dbunitH.equals("M")){
             dbwater_level = dbwater_level/100;
             dbwater_level = Math.round(dbwater_level*100.0)/100.0;
-            prntLevel=String.valueOf(dbwater_level)+" Metre";
+            prntLevel=String.valueOf(dbwater_level)+" Meter";
         }
         else{
             dbwater_level = Math.round(dbwater_level*100.0)/100.0;
@@ -227,13 +245,13 @@ public class MainTask extends AppCompatActivity {
     }
     public  void SetHumiTemp(){
         if (dbunitT.equals("°F")){
-            Double Temp = Double.valueOf(dbtemp);
+            double Temp = dbtemp;
             Temp=(Temp*(9.00/5.00))+32;
             Temp = Math.round(Temp*100.0)/100.0;
             temp = String.valueOf(Temp)+" °F";
         }
         else if(dbunitT.equals("°K")){
-            Double Temp = Double.valueOf(dbtemp);
+            double Temp = dbtemp;
             Temp=Temp + 273.15;
             Temp = Math.round(Temp*100.0)/100.0;
             temp = String.valueOf(Temp)+" °K";
@@ -242,10 +260,10 @@ public class MainTask extends AppCompatActivity {
             temp = dbtemp+" °C";
         }
         t1.setText(temp);
-        t2.setText(dbhum+" %");
+        t2.setText(String.valueOf(dbhum) +" %");
     }
     public void SetRainMessage(){
-        Integer a = Integer.valueOf(dbRainA);
+        int  a = dbRainA;
         if(a<=20){
             t3.setText(NoRain);
         }
@@ -317,7 +335,7 @@ public class MainTask extends AppCompatActivity {
         info1.setText(dbSub);
         info2.setText(dbRiver);
         info5.setText(dbLol);
-        info6.setText(dbRainA + "%");
+        info6.setText(String.valueOf(dbRainA) + "%");
 
         info9.setText(String.valueOf(mxhumi));
         info10.setText(String.valueOf(mnhumi));
@@ -458,23 +476,25 @@ public class MainTask extends AppCompatActivity {
                         for (DataSnapshot ds :dataSnapshot.getChildren()){
                             B = ds.getValue(bData.class);
                             if (dbunitH.equals("Inch")){
-                                double x = Double.valueOf(B.Level);
+                                Double x = Double.valueOf(B.Level);
                                 x=x/2.54;
                                 x = Math.round(x*100.0)/100.0;
                                 B.Level=x;
                                 B.Unit_h ="I";
                                 list.add(B);
                             }
+
+
                             else if (dbunitH.equals("Foot")){
-                                double x = Double.valueOf(B.Level);
+                                Double x = Double.valueOf(B.Level);
                                 x=x/30.48;
                                 x = Math.round(x*100.0)/100.0;
                                 B.Level=x;
-                                B.Unit_h +="F";
+                                B.Unit_h ="F";
                                 list.add(B);
                             }
                             else if (dbunitH.equals("M")){
-                                double x = Double.valueOf(B.Level);
+                                Double x = Double.valueOf(B.Level);
                                 x=x/100.00;
                                 x = Math.round(x*100.0)/100.0;
                                 B.Level=x;
@@ -511,7 +531,7 @@ public class MainTask extends AppCompatActivity {
             }
         });
     }
-    @Override
+   /* @Override
     public void onBackPressed() {
         if (backpretime+2000 > System.currentTimeMillis()){
             super.onBackPressed();
@@ -522,6 +542,38 @@ public class MainTask extends AppCompatActivity {
         }
         backpretime = System.currentTimeMillis();
 
-    }
+    }*/
+    /*public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
 
+    }*/
+    /*@Override
+    public void onBackPressed() {
+        if (backpretime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(getBaseContext(), "Press once again to exit",
+                    Toast.LENGTH_SHORT).show();
+            backpretime = System.currentTimeMillis();
+        }
+    }*/
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Are you sure you want to exit?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        int pid = android.os.Process.myPid();
+                        android.os.Process.killProcess(pid);
+                    }
+                }).create().show();
+
+    }
 }

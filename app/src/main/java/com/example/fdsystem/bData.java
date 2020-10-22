@@ -2,8 +2,8 @@ package com.example.fdsystem;
 
 public class bData {
     String DeviceID, DeviceArea, up_down,Unit_t, Unit_h;
-    double Level, maxHeight;
-    public bData(String deviceID, String deviceArea, double level, String Up_down, double MaxHeight, String unit_t, String unit_h) {
+    Double Level, maxHeight;
+    public bData(String deviceID, String deviceArea, Double level, String Up_down, Double MaxHeight, String unit_t, String unit_h) {
         DeviceID = deviceID;
         DeviceArea = deviceArea;
         Level=level;
@@ -16,19 +16,19 @@ public class bData {
     public bData() {
     }
 
-    public double getMaxHeight() {
+    public Double getMaxHeight() {
         return maxHeight;
     }
 
-    public void setMaxHeight(double maxHeight) {
+    public void setMaxHeight(Double maxHeight) {
         this.maxHeight = maxHeight;
     }
 
-    public double getLevel() {
+    public Double getLevel() {
         return Level;
     }
 
-    public void setLevel(double level) {
+    public void setLevel(Double level) {
         Level = level;
     }
 
