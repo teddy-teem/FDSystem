@@ -10,30 +10,42 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RegisterMessage"
+            android:screenOrientation="portrait"
             android:label="Register"></activity>
         <activity android:name=".DeleteId"
+            android:screenOrientation="portrait"
             android:label="Deleting.."/>
         <activity android:name=".About"
+            android:screenOrientation="portrait"
             android:label="About"/>
         <activity android:name=".WelcomeProfile"
+            android:screenOrientation="portrait"
             android:label="User Profile"/>
         <activity android:name=".Help"
+            android:screenOrientation="portrait"
             android:label="Help"/>
         <activity android:name=".UsersList"
+            android:screenOrientation="portrait"
             android:label="UserList"/>
         <activity android:name=".LogTable"
+            android:screenOrientation="portrait"
             android:label="Data Log"/>
         <activity android:name=".Preference"
+            android:screenOrientation="portrait"
             android:label="Preferance"/>
         <activity android:name=".AdminArea"
+            android:screenOrientation="portrait"
             android:label="Admin Area"/>
         <activity android:name=".Register"
+            android:screenOrientation="portrait"
             android:label="Registration"/>
         <activity
             android:name=".MainTask"
             android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             android:label="Main Page"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -180,7 +180,7 @@ public class MainTask extends AppCompatActivity {
                 dbhum = dh.doubleValue();
                 dbtemp = dt.doubleValue();
                 mxlevel = dmxl.doubleValue();
-                mxhumi = dmxl.doubleValue();
+                mxhumi = dmxh.doubleValue();
                 mxtemp = dmxt.doubleValue();
                 mnhumi = dmnh.doubleValue();
                 mntemp = dmnt.doubleValue();
